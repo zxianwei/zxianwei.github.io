@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Hello Spring Boot | zxianwei</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://github.com/zxianwei.github.io/favicon.ico?v=1584854002800">
+<link rel="stylesheet" href="https://github.com/zxianwei.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-161569162-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-161569162-1');
+</script>
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://github.com/zxianwei.github.io">
+        <img src="https://github.com/zxianwei.github.io/images/avatar.png?v=1584854002800" class="site-logo">
+        <h1 class="site-title">zxianwei</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/zxianwei" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Hello Spring Boot</h2>
+            <div class="post-date">2019-07-15</div>
+            
+              <div class="feature-container" style="background-image: url('https://github.com/zxianwei.github.io/post-images/hellospring.jpeg')">
+              </div>
+            
+            <div class="post-content">
+              <h4 id="spring-boot">Spring Boot</h4>
+<h4 id="基于spring构建的应用程序有以下特点">基于Spring构建的应用程序有以下特点</h4>
+<ul>
+<li>
+<h5 id="快-很快-非常快">快、很快、非常快</h5>
+</li>
+<li>
+<h5 id="进可开箱即用退可按需改动">进可开箱即用，退可按需改动</h5>
+</li>
+<li>
+<h5 id="提供各种非功能特性">提供各种非功能特性</h5>
+</li>
+<li>
+<h5 id="不用生成代码没有xml配置">不用生成代码，没有XML配置</h5>
+</li>
+</ul>
+<!-- more -->
+<h4 id="hello-spring">Hello-Spring</h4>
+<ul>
+<li>
+<h5 id="编写第一个spring程序打开spring网站">编写第一个Spring程序，打开<a href="https://start.spring.io/">spring</a>网站</h5>
+</li>
+<li>
+<h5 id="选择maven-project-java-spring-boot的版本-group和artifact的信息-添加search-dependencies-to-add等信息如下图最后点击generate-project下载压缩包">选择Maven Project、Java、Spring Boot的版本、Group和Artifact的信息、添加Search dependencies to add等信息如下图，最后点击Generate Project下载压缩包</h5>
+</li>
+</ul>
+<figure data-type="image" tabindex="1"><img src="https://github.com/zxianwei.github.io/post-images/1558601345593.png" alt="" loading="lazy"></figure>
+<ul>
+<li>
+<h5 id="将压缩包解压用idea打开该项目打开后的项目结构如下图">将压缩包解压，用IDEA打开该项目，打开后的项目结构如下图：</h5>
+</li>
+</ul>
+<figure data-type="image" tabindex="2"><img src="https://github.com/zxianwei.github.io/post-images/1558601366004.png" alt="" loading="lazy"></figure>
+<ul>
+<li>
+<h5 id="编写第一行代码">编写第一行代码</h5>
+</li>
+</ul>
+<pre><code>package com.zxw.hello.hellospring;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@SpringBootApplication
+@RestController
+public class HelloSpringApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(HelloSpringApplication.class, args);
+    }
+
+    @RequestMapping(&quot;/hello&quot;)
+    public String hello() {
+        return &quot;Hello Spring&quot;;
+    }
+}
+
+</code></pre>
+<p>运行该项目，打开Terminal输入</p>
+<pre><code> curl http://localhost:8080/hello 
+</code></pre>
+<p>就会返回（如下图）</p>
+<pre><code>Hello Spring%  
+</code></pre>
+<figure data-type="image" tabindex="3"><img src="https://s1.ax1x.com/2020/03/22/85SYz8.md.png" alt="image" loading="lazy"></figure>
+<p>在Terminal输入</p>
+<pre><code>curl http://localhost:8080/actuator/health
+得到结果
+{&quot;status&quot;:&quot;UP&quot;}%
+可以检查程序是否正常
+</code></pre>
+<p>执行打包：在Terminal中输入命令:</p>
+<pre><code>mvn clean package -Dmaven.test.skip
+打包完成后输入：ls 
+得到返回结果：
+HELP.md          hello-spring.iml mvnw             mvnw.cmd         pom.xml          src              target
+
+再输入：cd target
+得到返回结果：
+lasses                                  hello-spring-0.0.1-SNAPSHOT.jar          maven-archiver
+generated-sources                        hello-spring-0.0.1-SNAPSHOT.jar.original maven-status
+
+这样就可以得到可执行的jar包用java -jar 就可以运行这个程序如：
+java -jar hello-spring-0.0.1-SNAPSHOT.jar
+
+
+</code></pre>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://github.com/zxianwei.github.io/tag/JIdYE2S2L/" class="tag">
+                    Java
+                  </a>
+                
+                  <a href="https://github.com/zxianwei.github.io/tag/SX2qS6bYf/" class="tag">
+                    Spring
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://github.com/zxianwei.github.io/you-meng-fen-xiang-tu-pian-cuo-wu/">
+                  <h3 class="post-title">
+                    友盟分享图片错误
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '5593ae4c91a61268eb9b',
+        clientSecret: '573976b6549a7c9b74d8834e58b4d4fa8d51a28d',
+        repo: 'zxianwei.github.io',
+        owner: 'zxianwei',
+        admin: ['zxianwei'],
+        id: location.pathname,      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

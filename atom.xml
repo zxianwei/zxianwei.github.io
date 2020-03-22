@@ -1,0 +1,827 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://github.com/zxianwei.github.io</id>
+    <title>zxianwei</title>
+    <updated>2020-03-22T05:13:52.574Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://github.com/zxianwei.github.io"/>
+    <link rel="self" href="https://github.com/zxianwei.github.io/atom.xml"/>
+    <subtitle>温故而知新</subtitle>
+    <logo>https://github.com/zxianwei.github.io/images/avatar.png</logo>
+    <icon>https://github.com/zxianwei.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2020, zxianwei</rights>
+    <entry>
+        <title type="html"><![CDATA[ 全面分析 Spring 的编程式事务管理及声明式事务管理 ]]></title>
+        <id>https://github.com/zxianwei.github.io/zhuan-zai/</id>
+        <link href="https://github.com/zxianwei.github.io/zhuan-zai/">
+        </link>
+        <updated>2019-07-25T13:21:15.000Z</updated>
+        <summary type="html"><![CDATA[<p><a href="https://www.ibm.com/developerworks/cn/education/opensource/os-cn-spring-trans/index.html">全面分析 Spring 的编程式事务管理及声明式事务管理</a></p>
+<h4 id="关于本教程">关于本教程</h4>
+<p>本教程将深入讲解 Spring 简单而强大的事务管理功能，包括编程式事务和声明式事务。通过对本教程的学习，您将能够理解 Spring 事务管理的本质，并灵活运用之。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p><a href="https://www.ibm.com/developerworks/cn/education/opensource/os-cn-spring-trans/index.html">全面分析 Spring 的编程式事务管理及声明式事务管理</a></p>
+<h4 id="关于本教程">关于本教程</h4>
+<p>本教程将深入讲解 Spring 简单而强大的事务管理功能，包括编程式事务和声明式事务。通过对本教程的学习，您将能够理解 Spring 事务管理的本质，并灵活运用之。</p>
+<!-- more -->
+<h4 id="先决条件">先决条件</h4>
+<p>本教程假定您已经掌握了 Java 基础知识，并对 Spring 有一定了解。您还需要具备基本的事务管理的知识，比如：事务的定义，隔离级别的概念，等等。本文将直接使用这些概念而不做详细解释。另外，您最好掌握数据库的基础知识，虽然这不是必须。</p>
+<h4 id="系统需求">系统需求</h4>
+<p>要试验这份教程中的工具和示例，硬件配置需求为：至少带有 512MB 内存（推荐 1GB）的系统。需要安装以下软件：</p>
+<!--more-->
+<ul>
+<li>Sun JDK 5.0 或更新版本或 IBM Developer Kit for the Java 5 platform 版本。</li>
+<li>Spring framework 2.5。本教程附带的示例代码已经在 Spring 2.5.6 上测试过。</li>
+<li>MySQL 5.0 或更新版本。</li>
+</ul>
+<h4 id="spring-事务属性分析">Spring 事务属性分析</h4>
+<p>事务管理对于企业应用而言至关重要。它保证了用户的每一次操作都是可靠的，即便出现了异常的访问情况，也不至于破坏后台数据的完整性。就像银行的自助取款机，通常都能正常为客户服务，但是也难免遇到操作过程中机器突然出故障的情况，此时，事务就必须确保出故障前对账户的操作不生效，就像用户刚才完全没有使用过取款机一样，以保证用户和银行的利益都不受损失。</p>
+<p>在 Spring 中，事务是通过 TransactionDefinition 接口来定义的。该接口包含与事务属性有关的方法。具体如清单1所示：</p>
+<p>清单1. TransactionDefinition 接口中定义的主要方法</p>
+<pre><code>public interface TransactionDefinition{
+int getIsolationLevel();
+int getPropagationBehavior();
+int getTimeout();
+boolean isReadOnly();
+}
+</code></pre>
+<p>也许你会奇怪，为什么接口只提供了获取属性的方法，而没有提供相关设置属性的方法。其实道理很简单，事务属性的设置完全是程序员控制的，因此程序员可以自定义任何设置属性的方法，而且保存属性的字段也没有任何要求。唯一的要求的是，Spring 进行事务操作的时候，通过调用以上接口提供的方法必须能够返回事务相关的属性取值。</p>
+<h4 id="事务隔离级别">事务隔离级别</h4>
+<p>隔离级别是指若干个并发的事务之间的隔离程度。TransactionDefinition 接口中定义了五个表示隔离级别的常量：</p>
+<ul>
+<li>TransactionDefinition.ISOLATION_DEFAULT：这是默认值，表示使用底层数据库的默认隔离级别。对大部分数据库而言，通常这值就是TransactionDefinition.ISOLATION_READ_COMMITTED。</li>
+<li>TransactionDefinition.ISOLATION_READ_UNCOMMITTED：该隔离级别表示一个事务可以读取另一个事务修改但还没有提交的数据。该级别不能防止脏读和不可重复读，因此很少使用该隔离级别。</li>
+<li>TransactionDefinition.ISOLATION_READ_COMMITTED：该隔离级别表示一个事务只能读取另一个事务已经提交的数据。该级别可以防止脏读，这也是大多数情况下的推荐值。</li>
+<li>TransactionDefinition.ISOLATION_REPEATABLE_READ：该隔离级别表示一个事务在整个过程中可以多次重复执行某个查询，并且每次返回的记录都相同。即使在多次查询之间有新增的数据满足该查询，这些新增的记录也会被忽略。该级别可以防止脏读和不可重复读。</li>
+<li>TransactionDefinition.ISOLATION_SERIALIZABLE：所有的事务依次逐个执行，这样事务之间就完全不可能产生干扰，也就是说，该级别可以防止脏读、不可重复读以及幻读。但是这将严重影响程序的性能。通常情况下也不会用到该级别。</li>
+</ul>
+<h4 id="事务传播行为">事务传播行为</h4>
+<p>所谓事务的传播行为是指，如果在开始当前事务之前，一个事务上下文已经存在，此时有若干选项可以指定一个事务性方法的执行行为。在TransactionDefinition定义中包括了如下几个表示传播行为的常量：</p>
+<ul>
+<li>TransactionDefinition.PROPAGATION_REQUIRED：如果当前存在事务，则加入该事务；如果当前没有事务，则创建一个新的事务。</li>
+<li>TransactionDefinition.PROPAGATION_REQUIRES_NEW：创建一个新的事务，如果当前存在事务，则把当前事务挂起。</li>
+<li>TransactionDefinition.PROPAGATION_SUPPORTS：如果当前存在事务，则加入该事务；如果当前没有事务，则以非事务的方式继续运行。</li>
+<li>TransactionDefinition.PROPAGATION_NOT_SUPPORTED：以非事务方式运行，如果当前存在事务，则把当前事务挂起。</li>
+<li>TransactionDefinition.PROPAGATION_NEVER：以非事务方式运行，如果当前存在事务，则抛出异常。</li>
+<li>TransactionDefinition.PROPAGATION_MANDATORY：如果当前存在事务，则加入该事务；如果当前没有事务，则抛出异常。</li>
+<li>TransactionDefinition.PROPAGATION_NESTED：如果当前存在事务，则创建一个事务作为当前事务的嵌套事务来运行；如果当前没有事务，则该取值等价于TransactionDefinition.PROPAGATION_REQUIRED。<br>
+这里需要指出的是，前面的六种事务传播行为是 Spring 从 EJB 中引入的，他们共享相同的概念。而 PROPAGATION_NESTED是 Spring 所特有的。以 PROPAGATION_NESTED 启动的事务内嵌于外部事务中（如果存在外部事务的话），此时，内嵌事务并不是一个独立的事务，它依赖于外部事务的存在，只有通过外部的事务提交，才能引起内部事务的提交，嵌套的子事务不能单独提交。如果熟悉 JDBC 中的保存点（SavePoint）的概念，那嵌套事务就很容易理解了，其实嵌套的子事务就是保存点的一个应用，一个事务中可以包括多个保存点，每一个嵌套子事务。另外，外部事务的回滚也会导致嵌套子事务的回滚。</li>
+</ul>
+<h4 id="事务超时">事务超时</h4>
+<p>所谓事务超时，就是指一个事务所允许执行的最长时间，如果超过该时间限制但事务还没有完成，则自动回滚事务。在 TransactionDefinition 中以 int 的值来表示超时时间，其单位是秒。</p>
+<h4 id="事务的只读属性">事务的只读属性</h4>
+<p>事务的只读属性是指，对事务性资源进行只读操作或者是读写操作。所谓事务性资源就是指那些被事务管理的资源，比如数据源、 JMS 资源，以及自定义的事务性资源等等。如果确定只对事务性资源进行只读操作，那么我们可以将事务标志为只读的，以提高事务处理的性能。在 TransactionDefinition 中以 boolean 类型来表示该事务是否只读。</p>
+<h4 id="事务的回滚规则">事务的回滚规则</h4>
+<p>通常情况下，如果在事务中抛出了未检查异常（继承自 RuntimeException 的异常），则默认将回滚事务。如果没有抛出任何异常，或者抛出了已检查异常，则仍然提交事务。这通常也是大多数开发者希望的处理方式，也是 EJB 中的默认处理方式。但是，我们可以根据需要人为控制事务在抛出某些未检查异常时任然提交事务，或者在抛出某些已检查异常时回滚事务。</p>
+<h4 id="spring-事务管理-api-分析">Spring 事务管理 API 分析</h4>
+<p>Spring 框架中，涉及到事务管理的 API 大约有100个左右，其中最重要的有三个：TransactionDefinition、PlatformTransactionManager、TransactionStatus。所谓事务管理，其实就是“按照给定的事务规则来执行提交或者回滚操作”。“给定的事务规则”就是用 TransactionDefinition 表示的，“按照……来执行提交或者回滚操作”便是用 PlatformTransactionManager 来表示，而 TransactionStatus 用于表示一个运行着的事务的状态。打一个不恰当的比喻，TransactionDefinition 与 TransactionStatus 的关系就像程序和进程的关系。</p>
+<h4 id="transactiondef">TransactionDef...</h4>
+<p>该接口在前面已经介绍过，它用于定义一个事务。它包含了事务的静态属性，比如：事务传播行为、超时时间等等。Spring 为我们提供了一个默认的实现类：DefaultTransactionDefinition，该类适用于大多数情况。如果该类不能满足需求，可以通过实现 TransactionDefinition 接口来实现自己的事务定义。</p>
+<p>PlatformTrans...<br>
+PlatformTransactionManager 用于执行具体的事务操作。接口定义如清单2所示：</p>
+<p>清单2. PlatformTransactionManager 接口中定义的主要方法</p>
+<pre><code>Public interface PlatformTransactionManager{
+  TransactionStatus getTransaction(TransactionDefinition definition)
+   throws TransactionException;
+   void commit(TransactionStatus status)throws TransactionException;
+   void rollback(TransactionStatus status)throws TransactionException;
+}
+</code></pre>
+<p>根据底层所使用的不同的持久化 API 或框架，PlatformTransactionManager 的主要实现类大致如下：</p>
+<ul>
+<li>DataSourceTransactionManager：适用于使用JDBC和iBatis进行数据持久化操作的情况。</li>
+<li>HibernateTransactionManager：适用于使用Hibernate进行数据持久化操作的情况。</li>
+<li>JpaTransactionManager：适用于使用JPA进行数据持久化操作的情况。</li>
+<li>另外还有JtaTransactionManager 、JdoTransactionManager、JmsTransactionManager等等。<br>
+如果我们使用JTA进行事务管理，我们可以通过 JNDI 和 Spring 的 JtaTransactionManager 来获取一个容器管理的 DataSource。JtaTransactionManager 不需要知道 DataSource 和其他特定的资源，因为它将使用容器提供的全局事务管理。而对于其他事务管理器，比如DataSourceTransactionManager，在定义时需要提供底层的数据源作为其属性，也就是 DataSource。与 HibernateTransactionManager 对应的是 SessionFactory，与 JpaTransactionManager 对应的是 EntityManagerFactory 等等。</li>
+</ul>
+<h4 id="transactionstatus">TransactionStatus</h4>
+<p>PlatformTransactionManager.getTransaction(…) 方法返回一个 TransactionStatus 对象。返回的TransactionStatus 对象可能代表一个新的或已经存在的事务（如果在当前调用堆栈有一个符合条件的事务）。TransactionStatus 接口提供了一个简单的控制事务执行和查询事务状态的方法。该接口定义如清单3所示：</p>
+<p>清单3. TransactionStatus 接口中定义的主要方法</p>
+<pre><code>public  interface TransactionStatus{
+   boolean isNewTransaction();
+   void setRollbackOnly();
+   boolean isRollbackOnly();
+}
+</code></pre>
+<h3 id="编程式事务管理">编程式事务管理</h3>
+<h4 id="spring-的编程式事务管理概述">Spring 的编程式事务管理概述</h4>
+<p>在 Spring 出现以前，编程式事务管理对基于 POJO 的应用来说是唯一选择。用过 Hibernate 的人都知道，我们需要在代码中显式调用beginTransaction()、commit()、rollback()等事务管理相关的方法，这就是编程式事务管理。通过 Spring 提供的事务管理 API，我们可以在代码中灵活控制事务的执行。在底层，Spring 仍然将事务操作委托给底层的持久化框架来执行。</p>
+<h4 id="基于底层-api-的编程式事务管理">基于底层 API 的编程式事务管理</h4>
+<p>根据PlatformTransactionManager、TransactionDefinition 和 TransactionStatus 三个核心接口，我们完全可以通过编程的方式来进行事务管理。示例代码如清单4所示：</p>
+<p>清单4. 基于底层 API 的事务管理示例代码</p>
+<pre><code>public class BankServiceImpl implements BankService {
+private BankDao bankDao;
+private TransactionDefinition txDefinition;
+private PlatformTransactionManager txManager;
+......
+public boolean transfer(Long fromId， Long toId， double amount) {
+TransactionStatus txStatus = txManager.getTransaction(txDefinition);
+boolean result = false;
+try {
+result = bankDao.transfer(fromId， toId， amount);
+txManager.commit(txStatus);
+} catch (Exception e) {
+result = false;
+txManager.rollback(txStatus);
+System.out.println(&quot;Transfer Error!&quot;);
+}
+return result;
+}
+}
+</code></pre>
+<p>相应的配置文件如清单5所示：</p>
+<p>清单5. 基于底层API的事务管理示例配置文件</p>
+<pre><code>&lt;bean id=&quot;bankService&quot; class=&quot;footmark.spring.core.tx.programmatic.origin.BankServiceImpl&quot;&gt;
+&lt;property name=&quot;bankDao&quot; ref=&quot;bankDao&quot;/&gt;
+&lt;property name=&quot;txManager&quot; ref=&quot;transactionManager&quot;/&gt;
+&lt;property name=&quot;txDefinition&quot;&gt;
+&lt;bean class=&quot;org.springframework.transaction.support.DefaultTransactionDefinition&quot;&gt;
+&lt;property name=&quot;propagationBehaviorName&quot; value=&quot;PROPAGATION_REQUIRED&quot;/&gt;
+&lt;/bean&gt;
+&lt;/property&gt;
+&lt;/bean&gt;
+</code></pre>
+<p>如上所示，我们在类中增加了两个属性：一个是 TransactionDefinition 类型的属性，它用于定义一个事务；另一个是 PlatformTransactionManager 类型的属性，用于执行事务管理操作。</p>
+<p>如果方法需要实施事务管理，我们首先需要在方法开始执行前启动一个事务，调用PlatformTransactionManager.getTransaction(...) 方法便可启动一个事务。创建并启动了事务之后，便可以开始编写业务逻辑代码，然后在适当的地方执行事务的提交或者回滚。</p>
+<h4 id="基于-transactiontemplate-的编程式事务管理">基于 TransactionTemplate 的编程式事务管理</h4>
+<p>通过前面的示例可以发现，这种事务管理方式很容易理解，但令人头疼的是，事务管理的代码散落在业务逻辑代码中，破坏了原有代码的条理性，并且每一个业务方法都包含了类似的启动事务、提交/回滚事务的样板代码。幸好，Spring 也意识到了这些，并提供了简化的方法，这就是 Spring 在数据访问层非常常见的模板回调模式。如清单6所示：</p>
+<p>清单6. 基于 TransactionTemplate 的事务管理示例代码</p>
+<pre><code>
+public class BankServiceImpl implements BankService {
+private BankDao bankDao;
+private TransactionTemplate transactionTemplate;
+......
+public boolean transfer(final Long fromId， final Long toId， final double amount) {
+return (Boolean) transactionTemplate.execute(new TransactionCallback(){
+public Object doInTransaction(TransactionStatus status) {
+Object result;
+try {
+result = bankDao.transfer(fromId， toId， amount);
+} catch (Exception e) {
+status.setRollbackOnly();
+result = false;
+System.out.println(&quot;Transfer Error!&quot;);
+}
+return result;
+}
+});
+}
+}
+</code></pre>
+<h5 id="相应的xml配置如下">相应的XML配置如下：</h5>
+<p>清单 7. 基于 TransactionTemplate 的事务管理示例配置文件</p>
+<pre><code>&lt;bean id=&quot;bankService&quot;
+class=&quot;footmark.spring.core.tx.programmatic.template.BankServiceImpl&quot;&gt;
+&lt;property name=&quot;bankDao&quot; ref=&quot;bankDao&quot;/&gt;
+&lt;property name=&quot;transactionTemplate&quot; ref=&quot;transactionTemplate&quot;/&gt;
+&lt;/bean&gt;
+
+</code></pre>
+<p>TransactionTemplate 的 execute() 方法有一个 TransactionCallback 类型的参数，该接口中定义了一个 doInTransaction() 方法，通常我们以匿名内部类的方式实现 TransactionCallback 接口，并在其 doInTransaction() 方法中书写业务逻辑代码。这里可以使用默认的事务提交和回滚规则，这样在业务代码中就不需要显式调用任何事务管理的 API。doInTransaction() 方法有一个TransactionStatus 类型的参数，我们可以在方法的任何位置调用该参数的 setRollbackOnly() 方法将事务标识为回滚的，以执行事务回滚。</p>
+<p>根据默认规则，如果在执行回调方法的过程中抛出了未检查异常，或者显式调用了TransacationStatus.setRollbackOnly() 方法，则回滚事务；如果事务执行完成或者抛出了 checked 类型的异常，则提交事务。</p>
+<p>TransactionCallback 接口有一个子接口 TransactionCallbackWithoutResult，该接口中定义了一个 doInTransactionWithoutResult() 方法，TransactionCallbackWithoutResult 接口主要用于事务过程中不需要返回值的情况。当然，对于不需要返回值的情况，我们仍然可以使用 TransactionCallback 接口，并在方法中返回任意值即可。</p>
+<h3 id="声明式事务管理">声明式事务管理</h3>
+<h4 id="spring-的声明式事务管理概述">Spring 的声明式事务管理概述</h4>
+<p>Spring 的声明式事务管理在底层是建立在 AOP 的基础之上的。其本质是对方法前后进行拦截，然后在目标方法开始之前创建或者加入一个事务，在执行完目标方法之后根据执行情况提交或者回滚事务。</p>
+<p>声明式事务最大的优点就是不需要通过编程的方式管理事务，这样就不需要在业务逻辑代码中掺杂事务管理的代码，只需在配置文件中做相关的事务规则声明（或通过等价的基于标注的方式），便可以将事务规则应用到业务逻辑中。因为事务管理本身就是一个典型的横切逻辑，正是 AOP 的用武之地。Spring 开发团队也意识到了这一点，为声明式事务提供了简单而强大的支持。</p>
+<p>声明式事务管理曾经是 EJB 引以为傲的一个亮点，如今 Spring 让 POJO 在事务管理方面也拥有了和 EJB 一样的待遇，让开发人员在 EJB 容器之外也用上了强大的声明式事务管理功能，这主要得益于 Spring 依赖注入容器和 Spring AOP 的支持。依赖注入容器为声明式事务管理提供了基础设施，使得 Bean 对于 Spring 框架而言是可管理的；而 Spring AOP 则是声明式事务管理的直接实现者，这一点通过清单8可以看出来。</p>
+<p>通常情况下，笔者强烈建议在开发中使用声明式事务，不仅因为其简单，更主要是因为这样使得纯业务代码不被污染，极大方便后期的代码维护。</p>
+<p>和编程式事务相比，声明式事务唯一不足地方是，后者的最细粒度只能作用到方法级别，无法做到像编程式事务那样可以作用到代码块级别。但是即便有这样的需求，也存在很多变通的方法，比如，可以将需要进行事务管理的代码块独立为方法等等。</p>
+<p>下面就来看看 Spring 为我们提供的声明式事务管理功能。</p>
+<h4 id="基于-transactioninter-的声明式事务管理">基于 TransactionInter... 的声明式事务管理</h4>
+<p>最初，Spring 提供了 TransactionInterceptor 类来实施声明式事务管理功能。先看清单8的配置文件：</p>
+<p>清单 8. 基于 TransactionInterceptor 的事务管理示例配置文件</p>
+<pre><code>&lt;beans...&gt;
+......
+&lt;bean id=&quot;transactionInterceptor&quot;
+class=&quot;org.springframework.transaction.interceptor.TransactionInterceptor&quot;&gt;
+&lt;property name=&quot;transactionManager&quot; ref=&quot;transactionManager&quot;/&gt;
+&lt;property name=&quot;transactionAttributes&quot;&gt;
+&lt;props&gt;
+&lt;prop key=&quot;transfer&quot;&gt;PROPAGATION_REQUIRED&lt;/prop&gt;
+&lt;/props&gt;
+&lt;/property&gt;
+&lt;/bean&gt;
+&lt;bean id=&quot;bankServiceTarget&quot;
+class=&quot;footmark.spring.core.tx.declare.origin.BankServiceImpl&quot;&gt;
+&lt;property name=&quot;bankDao&quot; ref=&quot;bankDao&quot;/&gt;
+&lt;/bean&gt;
+&lt;bean id=&quot;bankService&quot;
+class=&quot;org.springframework.aop.framework.ProxyFactoryBean&quot;&gt;
+&lt;property name=&quot;target&quot; ref=&quot;bankServiceTarget&quot;/&gt;
+&lt;property name=&quot;interceptorNames&quot;&gt;
+&lt;list&gt;
+&lt;idref bean=&quot;transactionInterceptor&quot;/&gt;
+&lt;/list&gt;
+&lt;/property&gt;
+&lt;/bean&gt;
+......
+&lt;/beans&gt;
+</code></pre>
+<p>首先，我们配置了一个 TransactionInterceptor 来定义相关的事务规则，他有两个主要的属性：一个是 transactionManager，用来指定一个事务管理器，并将具体事务相关的操作委托给它；另一个是 Properties 类型的 transactionAttributes 属性，它主要用来定义事务规则，该属性的每一个键值对中，键指定的是方法名，方法名可以使用通配符，而值就表示相应方法的所应用的事务属性。</p>
+<p>指定事务属性的取值有较复杂的规则，这在 Spring 中算得上是一件让人头疼的事。具体的书写规则如下：</p>
+<p>1传播行为 [，隔离级别] [，只读属性] [，超时属性] [不影响提交的异常] [，导致回滚的异常]</p>
+<ul>
+<li>传播行为是唯一必须设置的属性，其他都可以忽略，Spring为我们提供了合理的默认值。</li>
+<li>传播行为的取值必须以“PROPAGATION_”开头，具体包括：PROPAGATION_MANDATORY、PROPAGATION_NESTED、PROPAGATION_NEVER、PROPAGATION_NOT_SUPPORTED、PROPAGATION_REQUIRED、PROPAGATION_REQUIRES_NEW、PROPAGATION_SUPPORTS，共七种取值。</li>
+<li>隔离级别的取值必须以“ISOLATION_”开头，具体包括：ISOLATION_DEFAULT、ISOLATION_READ_COMMITTED、ISOLATION_READ_UNCOMMITTED、ISOLATION_REPEATABLE_READ、ISOLATION_SERIALIZABLE，共五种取值。</li>
+<li>如果事务是只读的，那么我们可以指定只读属性，使用“readOnly”指定。否则我们不需要设置该属性。</li>
+<li>超时属性的取值必须以“TIMEOUT_”开头，后面跟一个int类型的值，表示超时时间，单位是秒。</li>
+<li>不影响提交的异常是指，即使事务中抛出了这些类型的异常，事务任然正常提交。必须在每一个异常的名字前面加上“+”。异常的名字可以是类名的一部分。比如“+RuntimeException”、“+tion”等等。</li>
+<li>导致回滚的异常是指，当事务中抛出这些类型的异常时，事务将回滚。必须在每一个异常的名字前面加上“-”。异常的名字可以是类名的全部或者部分，比如“-RuntimeException”、“-tion”等等。<br>
+以下是两个示例：</li>
+</ul>
+<pre><code>&lt;property name=&quot;*Service&quot;&gt;
+PROPAGATION_REQUIRED，ISOLATION_READ_COMMITTED，TIMEOUT_20，
++AbcException，+DefException，-HijException
+&lt;/property&gt;
+</code></pre>
+<p>以上表达式表示，针对所有方法名以 Service 结尾的方法，使用 PROPAGATION_REQUIRED 事务传播行为，事务的隔离级别是 ISOLATION_READ_COMMITTED，超时时间为20秒，当事务抛出 AbcException 或者 DefException 类型的异常，则仍然提交，当抛出 HijException 类型的异常时必须回滚事务。这里没有指定&quot;readOnly&quot;，表示事务不是只读的。</p>
+<p>1<br>
+<property name="test">PROPAGATION_REQUIRED，readOnly</property><br>
+以上表达式表示，针对所有方法名为 test 的方法，使用 PROPAGATION_REQUIRED 事务传播行为，并且该事务是只读的。除此之外，其他的属性均使用默认值。比如，隔离级别和超时时间使用底层事务性资源的默认值，并且当发生未检查异常，则回滚事务，发生已检查异常则仍提交事务。</p>
+<p>配置好了 TransactionInterceptor，我们还需要配置一个 ProxyFactoryBean 来组装 target 和advice。这也是典型的 Spring AOP 的做法。通过 ProxyFactoryBean 生成的代理类就是织入了事务管理逻辑后的目标类。至此，声明式事务管理就算是实现了。我们没有对业务代码进行任何操作，所有设置均在配置文件中完成，这就是声明式事务的最大优点。</p>
+<h4 id="基于-transactionproxy-的声明式事务管理">基于 TransactionProxy... 的声明式事务管理</h4>
+<p>前面的声明式事务虽然好，但是却存在一个非常恼人的问题：配置文件太多。我们必须针对每一个目标对象配置一个 ProxyFactoryBean；另外，虽然可以通过父子 Bean 的方式来复用 TransactionInterceptor 的配置，但是实际的复用几率也不高；这样，加上目标对象本身，每一个业务类可能需要对应三个 <bean/> 配置，随着业务类的增多，配置文件将会变得越来越庞大，管理配置文件又成了问题。</p>
+<p>为了缓解这个问题，Spring 为我们提供了 TransactionProxyFactoryBean，用于将TransactionInterceptor 和 ProxyFactoryBean 的配置合二为一。如清单9所示：</p>
+<p>清单9. 基于 TransactionProxyFactoryBean 的事务管理示例配置文件</p>
+<pre><code>&lt;beans......&gt;
+......
+&lt;bean id=&quot;bankServiceTarget&quot;
+class=&quot;footmark.spring.core.tx.declare.classic.BankServiceImpl&quot;&gt;
+&lt;property name=&quot;bankDao&quot; ref=&quot;bankDao&quot;/&gt;
+&lt;/bean&gt;
+&lt;bean id=&quot;bankService&quot;
+class=&quot;org.springframework.transaction.interceptor.TransactionProxyFactoryBean&quot;&gt;
+&lt;property name=&quot;target&quot; ref=&quot;bankServiceTarget&quot;/&gt;
+&lt;property name=&quot;transactionManager&quot; ref=&quot;transactionManager&quot;/&gt;
+&lt;property name=&quot;transactionAttributes&quot;&gt;
+&lt;props&gt;
+&lt;prop key=&quot;transfer&quot;&gt;PROPAGATION_REQUIRED&lt;/prop&gt;
+&lt;/props&gt;
+&lt;/property&gt;
+&lt;/bean&gt;
+......
+&lt;/beans&gt;
+</code></pre>
+<p>如此一来，配置文件与先前相比简化了很多。我们把这种配置方式称为 Spring 经典的声明式事务管理。相信在早期使用 Spring 的开发人员对这种配置声明式事务的方式一定非常熟悉。</p>
+<p>但是，显式为每一个业务类配置一个 TransactionProxyFactoryBean 的做法将使得代码显得过于刻板，为此我们可以使用自动创建代理的方式来将其简化，使用自动创建代理是纯 AOP 知识，请读者参考相关文档，不在此赘述。</p>
+<h4 id="基于-tx-命名空间的声明式事务管理">基于 <tx> 命名空间的声明式事务管理</h4>
+<p>前面两种声明式事务配置方式奠定了 Spring 声明式事务管理的基石。在此基础上，Spring 2.x 引入了 <tx> 命名空间，结合使用 <aop> 命名空间，带给开发人员配置声明式事务的全新体验，配置变得更加简单和灵活。另外，得益于 <aop> 命名空间的切点表达式支持，声明式事务也变得更加强大。</p>
+<p>如清单10所示：</p>
+<p>清单10. 基于 <tx> 的事务管理示例配置文件</p>
+<pre><code>&lt;beans......&gt;
+......
+&lt;bean id=&quot;bankService&quot;
+class=&quot;footmark.spring.core.tx.declare.namespace.BankServiceImpl&quot;&gt;
+&lt;property name=&quot;bankDao&quot; ref=&quot;bankDao&quot;/&gt;
+&lt;/bean&gt;
+&lt;tx:advice id=&quot;bankAdvice&quot; transaction-manager=&quot;transactionManager&quot;&gt;
+&lt;tx:attributes&gt;
+&lt;tx:method name=&quot;transfer&quot; propagation=&quot;REQUIRED&quot;/&gt;
+&lt;/tx:attributes&gt;
+&lt;/tx:advice&gt;
+ 
+&lt;aop:config&gt;
+&lt;aop:pointcut id=&quot;bankPointcut&quot; expression=&quot;execution(* *.transfer(..))&quot;/&gt;
+&lt;aop:advisor advice-ref=&quot;bankAdvice&quot; pointcut-ref=&quot;bankPointcut&quot;/&gt;
+&lt;/aop:config&gt;
+......
+&lt;/beans&gt;
+
+</code></pre>
+<p>如果默认的事务属性就能满足要求，那么代码简化为如清单 11 所示：</p>
+<p>清单 11. 简化后的基于 <tx> 的事务管理示例配置文件</p>
+<pre><code>&lt;beans......&gt;
+......
+&lt;bean id=&quot;bankService&quot;
+class=&quot;footmark.spring.core.tx.declare.namespace.BankServiceImpl&quot;&gt;
+&lt;property name=&quot;bankDao&quot; ref=&quot;bankDao&quot;/&gt;
+&lt;/bean&gt;
+&lt;tx:advice id=&quot;bankAdvice&quot; transaction-manager=&quot;transactionManager&quot;&gt;
+&lt;aop:config&gt;
+&lt;aop:pointcut id=&quot;bankPointcut&quot; expression=&quot;execution(**.transfer(..))&quot;/&gt;
+&lt;aop:advisor advice-ref=&quot;bankAdvice&quot; pointcut-ref=&quot;bankPointcut&quot;/&gt;
+&lt;/aop:config&gt;
+......
+&lt;/beans&gt;
+</code></pre>
+<p>由于使用了切点表达式，我们就不需要针对每一个业务类创建一个代理对象了。另外，如果配置的事务管理器 Bean 的名字取值为“transactionManager”，则我们可以省略 <a href="tx:advice">tx:advice</a> 的 transaction-manager 属性，因为该属性的默认值即为“transactionManager”。</p>
+<h4 id="基于-transactional-的声明式事务管理">基于 @Transactional 的声明式事务管理</h4>
+<p>除了基于命名空间的事务配置方式，Spring 2.x 还引入了基于 Annotation 的方式，具体主要涉及@Transactional 标注。@Transactional 可以作用于接口、接口方法、类以及类方法上。当作用于类上时，该类的所有 public 方法将都具有该类型的事务属性，同时，我们也可以在方法级别使用该标注来覆盖类级别的定义。如清单12所示：</p>
+<p>清单12. 基于 @Transactional 的事务管理示例配置文件</p>
+<pre><code>@Transactional(propagation = Propagation.REQUIRED)
+public boolean transfer(Long fromId， Long toId， double amount) {
+return bankDao.transfer(fromId， toId， amount);
+}
+</code></pre>
+<p>Spring 使用 BeanPostProcessor 来处理 Bean 中的标注，因此我们需要在配置文件中作如下声明来激活该后处理 Bean，如清单13所示：</p>
+<p>清单13. 启用后处理Bean的配置</p>
+<pre><code>&lt;tx:annotation-driven transaction-manager=&quot;transactionManager&quot;/&gt;
+</code></pre>
+<p>与前面相似，transaction-manager 属性的默认值是 transactionManager，如果事务管理器 Bean 的名字即为该值，则可以省略该属性。</p>
+<p>虽然 @Transactional 注解可以作用于接口、接口方法、类以及类方法上，但是 Spring 小组建议不要在接口或者接口方法上使用该注解，因为这只有在使用基于接口的代理时它才会生效。另外， @Transactional 注解应该只被应用到 public 方法上，这是由 Spring AOP 的本质决定的。如果你在 protected、private 或者默认可见性的方法上使用 @Transactional 注解，这将被忽略，也不会抛出任何异常。</p>
+<p>基于 <tx> 命名空间和基于 @Transactional 的事务声明方式各有优缺点。基于 <tx> 的方式，其优点是与切点表达式结合，功能强大。利用切点表达式，一个配置可以匹配多个方法，而基于 @Transactional 的方式必须在每一个需要使用事务的方法或者类上用 @Transactional 标注，尽管可能大多数事务的规则是一致的，但是对 @Transactional 而言，也无法重用，必须逐个指定。另一方面，基于 @Transactional 的方式使用起来非常简单明了，没有学习成本。开发人员可以根据需要，任选其中一种使用，甚至也可以根据需要混合使用这两种方式。</p>
+<p>如果不是对遗留代码进行维护，则不建议再使用基于 TransactionInterceptor 以及基于TransactionProxyFactoryBean 的声明式事务管理方式，但是，学习这两种方式非常有利于对底层实现的理解。</p>
+<p>虽然上面共列举了四种声明式虽然上面共列举了四种声明式事务管理方式，但是这样的划分只是为了便于理解，其实后台的实现方式是一样的，只是</p>
+<h3 id="结束语">结束语</h3>
+<p>本教程的知识点大致总结如下：</p>
+<ul>
+<li>基于onDefinition、PlatformTransactionManager、TransactionStatus 编程式事务管理是 Spring 提供的最原始的方式，通常我们不会这么写，但是了解这种方式对理解 Spring 事务管理的本质有很大作用。</li>
+<li>基于 TransactionTemplate 的编程式事务管理是对上一种方式的封装，使得编码更简单、清晰。</li>
+<li>基于 TransactionInterceptor 的声明式事务是 Spring 声明式事务的基础，通常也不建议使用这种方式，但是与前面一样，了解这种方式对理解 Spring 声明式事务有很大作用。</li>
+<li>基于 TransactionProxyFactoryBean 的声明式事务是上中方式的改进版本，简化的配置文件的书写，这是 Spring 早期推荐的声明式事务管理方式，但是在 Spring 2.0 中已经不推荐了。</li>
+<li>基于 <tx> 和 <aop> 命名空间的声明式事务管理是目前推荐的方式，其最大特点是与 Spring AOP 结合紧密，可以充分利用切点表达式的强大支持，使得管理事务更加灵活。</li>
+<li>基于 @Transactional 的方式将声明式事务管理简化到了极致。开发人员只需在配置文件中加上一行启用相关后处理 Bean 的配置，然后在需要实施事务管理的方法或者类上使用 @Transactional 指定事务规则即可实现事务管理，而且功能也不必其他方式逊色。</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Spring中使用JDBC Template访问数据库]]></title>
+        <id>https://github.com/zxianwei.github.io/spring-zhong-shi-yong-jdbc-template-fang-wen-shu-ju-ku/</id>
+        <link href="https://github.com/zxianwei.github.io/spring-zhong-shi-yong-jdbc-template-fang-wen-shu-ju-ku/">
+        </link>
+        <updated>2019-07-17T12:58:51.000Z</updated>
+        <summary type="html"><![CDATA[<h4 id="简介">简介</h4>
+<ul>
+<li>为了简化持久化操作，Spring在JDBC API之上提供了JDBC Template组件。</li>
+<li>JDBC Template提供统一的模板方法，在保留代码灵活性的基础上，尽量减少持久化代码。</li>
+</ul>
+<h4 id="创建项目">创建项目</h4>
+]]></summary>
+        <content type="html"><![CDATA[<h4 id="简介">简介</h4>
+<ul>
+<li>为了简化持久化操作，Spring在JDBC API之上提供了JDBC Template组件。</li>
+<li>JDBC Template提供统一的模板方法，在保留代码灵活性的基础上，尽量减少持久化代码。</li>
+</ul>
+<h4 id="创建项目">创建项目</h4>
+<!--more-->
+<p>创建maven项目，完整的项目结构是这样的<br>
+<img src="https://upload-images.jianshu.io/upload_images/4148711-43a1ef4995206058.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image" loading="lazy"><br>
+在pom文件中添加项目所需要的依赖</p>
+<pre><code>    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;junit&lt;/groupId&gt;
+            &lt;artifactId&gt;junit&lt;/artifactId&gt;
+            &lt;version&gt;4.12&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-core&lt;/artifactId&gt;
+            &lt;version&gt;4.2.4.RELEASE&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+            &lt;version&gt;4.2.4.RELEASE&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-beans&lt;/artifactId&gt;
+            &lt;version&gt;4.2.4.RELEASE&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-expression&lt;/artifactId&gt;
+            &lt;version&gt;4.2.4.RELEASE&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-tx&lt;/artifactId&gt;
+            &lt;version&gt;4.2.4.RELEASE&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-test&lt;/artifactId&gt;
+            &lt;version&gt;4.2.4.RELEASE&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-jdbc&lt;/artifactId&gt;
+            &lt;version&gt;4.2.4.RELEASE&lt;/version&gt;
+        &lt;/dependency&gt;
+          &lt;dependency&gt;
+            &lt;groupId&gt;mysql&lt;/groupId&gt;
+            &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+            &lt;version&gt;5.1.6&lt;/version&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+</code></pre>
+<p>在applicationContext.xml文件中添加以下配置：</p>
+<pre><code class="language-&lt;?xml">&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
+    &lt;bean id=&quot;basicDataSource&quot; class=&quot;org.springframework.jdbc.datasource.DriverManagerDataSource&quot;&gt;
+        &lt;property name=&quot;driverClassName&quot; value=&quot;com.mysql.jdbc.Driver&quot;/&gt;
+        &lt;property name=&quot;url&quot; value=&quot;jdbc:mysql://localhost:3306/db1?useUnicode=true&amp;amp;characterEncoding=utf-8&quot;/&gt;
+        &lt;property name=&quot;username&quot; value=&quot;root&quot;/&gt;
+        &lt;property name=&quot;password&quot; value=&quot;zxw12345&quot;/&gt;
+    &lt;/bean&gt;
+    &lt;bean id=&quot;jdbcTemplate&quot; class=&quot;org.springframework.jdbc.core.JdbcTemplate&quot;&gt;
+        &lt;property name=&quot;dataSource&quot; ref=&quot;basicDataSource&quot;/&gt;
+    &lt;/bean&gt;
+&lt;/beans&gt;
+</code></pre>
+<ul>
+<li>创建数据库</li>
+</ul>
+<pre><code>    private JdbcTemplate jdbcTemplate;
+    private ApplicationContext applicationContext;
+
+    {
+        applicationContext = new ClassPathXmlApplicationContext(&quot;applicationContext.xml&quot;);
+        jdbcTemplate = (JdbcTemplate) applicationContext.getBean(&quot;jdbcTemplate&quot;);
+    }
+
+    /**
+     * 创建数据库
+     */
+    @Test
+    public void execute() {
+        String sql = &quot;CREATE TABLE teacher(id SMALLINT AUTO_INCREMENT PRIMARY KEY ,name VARCHAR (20),sex VARCHAR (20))&quot;;
+        jdbcTemplate.execute(sql);
+    }
+</code></pre>
+<p>可以打开终端验证有没有创建成功<br>
+<img src="https://upload-images.jianshu.io/upload_images/4148711-f813610dfb72c548.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image" loading="lazy"></p>
+<h4 id="增删改">增删改</h4>
+<ul>
+<li>update:对数据进行增删改操作</li>
+<li>batchUpdate:批量增删改操作</li>
+</ul>
+<p>添加数据</p>
+<pre><code>    /**
+     * 添加数据  一条数据
+     */
+    @Test
+    public void testUpdte() {
+        String sql = &quot;INSERT INTO teacher(name,sex) VALUES (?,?)&quot;;
+        jdbcTemplate.update(sql, new Object[]{&quot;大小桥未久&quot;, &quot;女&quot;});
+    }
+
+    /**
+     * 添加数据 数组方式
+     */
+    @Test
+    public void batchUpdate() {
+        String[] sql = {
+                &quot;INSERT INTO teacher (name,sex) VALUES ('武藤兰姐姐','女')&quot;,
+                &quot;INSERT INTO teacher (name,sex) VALUES ('苍井空妹妹','女')&quot;,
+        };
+        jdbcTemplate.batchUpdate(sql);
+    }
+
+    /**
+     * 添加数据 集合方式
+     */
+    @Test
+    public void batchUpdateArrayList() {
+        String sql = &quot;INSERT INTO teacher(name,sex) VALUES (?,?)&quot;;
+        List&lt;Object[]&gt; list = new ArrayList&lt;&gt;();
+        list.add(new Object[]{&quot;波少野结衣&quot;, &quot;女&quot;});
+        list.add(new Object[]{&quot;菜虚鲲&quot;, &quot;不祥&quot;});
+        jdbcTemplate.batchUpdate(sql, list);
+    }
+</code></pre>
+<p><s>打开终端查看一下有没有添加成功</s>可以使用查询方法进项验证</p>
+<h4 id="查询">查询</h4>
+<ul>
+<li>queryForObject简单查询获取一个</li>
+<li>queryForList简单查询获取多个</li>
+<li>queryForMap查询复杂对象(封装为Map)，查询一个</li>
+<li>queryForList查询复杂对象(封装为Map)，查询多个</li>
+</ul>
+<pre><code>    /**
+     * 简单查询
+     */
+    @Test
+    public void queryListMap() {
+        String sql = &quot;SELECT * FROM teacher&quot;;
+        List&lt;Map&lt;String, Object&gt;&gt; stringObjectMap = jdbcTemplate.queryForList(sql);
+        System.out.println(stringObjectMap);
+    }
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://upload-images.jianshu.io/upload_images/4148711-1bfd3e6e51dd19e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="ZLw4FP.png" loading="lazy"></figure>
+<p>修改数据</p>
+<pre><code>    /**
+     * 修改内容
+     */
+    @Test
+    public void updateName() {
+        String sql = &quot;UPDATE teacher SET sex = ? WHERE name = ?&quot;;
+        jdbcTemplate.update(sql, &quot;男女&quot;, &quot;菜虚鲲&quot;);
+    }
+
+</code></pre>
+<p>删除数据</p>
+<pre><code>    /**
+     * 修改内容
+     */
+    @Test
+    public void updateDelete() {
+        String sql = &quot;DELETE FROM teacher WHERE name  = ? &quot;;
+        jdbcTemplate.update(sql, &quot;菜虚鲲&quot;);
+    }
+</code></pre>
+<p>查询简单数据</p>
+<pre><code>    /**
+     * 简单查询 查询数据长度
+     */
+    @Test
+    public void querySize() {
+        String sql = &quot;SELECT COUNT (*) FROM teacher&quot;;
+        int strings = jdbcTemplate.queryForObject(sql, Integer.class);
+        System.out.println(strings);
+    }
+
+    /**
+     * 简单查询 根据性别查询
+     */
+    @Test
+    public void queryList() {
+        String sql = &quot;SELECT name FROM teacher WHERE sex=?&quot;;
+        List&lt;String&gt; strings = jdbcTemplate.queryForList(sql, String.class, &quot;女&quot;);
+        System.out.println(strings);
+    }
+
+    /**
+     * 简单查询
+     */
+    @Test
+    public void queryListMap() {
+        String sql = &quot;SELECT * FROM teacher&quot;;
+        List&lt;Map&lt;String, Object&gt;&gt; stringObjectMap = jdbcTemplate.queryForList(sql);
+        System.out.println(stringObjectMap);
+    }
+
+    /**
+     * 简单查询 map接收 长度为1
+     */
+    @Test
+    public void queryMap() {
+        String sql = &quot;SELECT * FEOM teacher WHERE id = ? &quot;;
+        Map&lt;String, Object&gt; stringObjectMap = jdbcTemplate.queryForMap(sql, &quot;1&quot;);
+        System.out.println(stringObjectMap);
+    }
+
+</code></pre>
+<p>查询复杂数据</p>
+<pre><code>package com.zxw.spring.entity;
+//新建实体类
+public class Student {
+    private String id;
+    private String name;
+    private String sex;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;Student{&quot; +
+                &quot;id='&quot; + id + '\'' +
+                &quot;, name='&quot; + name + '\'' +
+                &quot;, sex='&quot; + sex + '\'' +
+                '}';
+    }
+}
+
+
+       /**
+     * 创建RowMapper
+     */
+    private class StudentRowMapper implements RowMapper&lt;Student&gt; {
+
+        @Override
+        public Student mapRow(ResultSet resultSet, int i) throws SQLException {
+            Student student = new Student();
+            student.setId(resultSet.getString(&quot;id&quot;));
+            student.setName(resultSet.getString(&quot;name&quot;));
+            student.setSex(resultSet.getString(&quot;sex&quot;));
+            return student;
+        }
+    }
+
+
+
+    /**
+     * 查询复杂对象  获取一个
+     */
+    @Test
+    public void queryRowMapper() {
+        String sql = &quot;SELECT * FROM student WHERE id = ?&quot;;
+        Student student = jdbcTemplate.queryForObject(sql, new StudentRowMapper(), &quot;10&quot;);
+        System.out.println(student);
+    }
+
+    /**
+     * 查询复杂对象 获取多个
+     */
+    @Test
+    public void queryRowMapperAll() {
+        String sql = &quot;SELECT * FROM STUDENT&quot;;
+        List&lt;Student&gt; query = jdbcTemplate.query(sql, new StudentRowMapper());
+        System.out.println(query);
+    }
+
+</code></pre>
+<p>以上就是Jdbc Template的增删改查。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Hello Spring Boot]]></title>
+        <id>https://github.com/zxianwei.github.io/hellospring/</id>
+        <link href="https://github.com/zxianwei.github.io/hellospring/">
+        </link>
+        <updated>2019-07-15T08:46:22.000Z</updated>
+        <summary type="html"><![CDATA[<h4 id="spring-boot">Spring Boot</h4>
+<h4 id="基于spring构建的应用程序有以下特点">基于Spring构建的应用程序有以下特点</h4>
+<ul>
+<li>
+<h5 id="快-很快-非常快">快、很快、非常快</h5>
+</li>
+<li>
+<h5 id="进可开箱即用退可按需改动">进可开箱即用，退可按需改动</h5>
+</li>
+<li>
+<h5 id="提供各种非功能特性">提供各种非功能特性</h5>
+</li>
+<li>
+<h5 id="不用生成代码没有xml配置">不用生成代码，没有XML配置</h5>
+</li>
+</ul>
+]]></summary>
+        <content type="html"><![CDATA[<h4 id="spring-boot">Spring Boot</h4>
+<h4 id="基于spring构建的应用程序有以下特点">基于Spring构建的应用程序有以下特点</h4>
+<ul>
+<li>
+<h5 id="快-很快-非常快">快、很快、非常快</h5>
+</li>
+<li>
+<h5 id="进可开箱即用退可按需改动">进可开箱即用，退可按需改动</h5>
+</li>
+<li>
+<h5 id="提供各种非功能特性">提供各种非功能特性</h5>
+</li>
+<li>
+<h5 id="不用生成代码没有xml配置">不用生成代码，没有XML配置</h5>
+</li>
+</ul>
+<!-- more -->
+<h4 id="hello-spring">Hello-Spring</h4>
+<ul>
+<li>
+<h5 id="编写第一个spring程序打开spring网站">编写第一个Spring程序，打开<a href="https://start.spring.io/">spring</a>网站</h5>
+</li>
+<li>
+<h5 id="选择maven-project-java-spring-boot的版本-group和artifact的信息-添加search-dependencies-to-add等信息如下图最后点击generate-project下载压缩包">选择Maven Project、Java、Spring Boot的版本、Group和Artifact的信息、添加Search dependencies to add等信息如下图，最后点击Generate Project下载压缩包</h5>
+</li>
+</ul>
+<figure data-type="image" tabindex="1"><img src="https://github.com/zxianwei.github.io/post-images/1558601345593.png" alt="" loading="lazy"></figure>
+<ul>
+<li>
+<h5 id="将压缩包解压用idea打开该项目打开后的项目结构如下图">将压缩包解压，用IDEA打开该项目，打开后的项目结构如下图：</h5>
+</li>
+</ul>
+<figure data-type="image" tabindex="2"><img src="https://github.com/zxianwei.github.io/post-images/1558601366004.png" alt="" loading="lazy"></figure>
+<ul>
+<li>
+<h5 id="编写第一行代码">编写第一行代码</h5>
+</li>
+</ul>
+<pre><code>package com.zxw.hello.hellospring;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@SpringBootApplication
+@RestController
+public class HelloSpringApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(HelloSpringApplication.class, args);
+    }
+
+    @RequestMapping(&quot;/hello&quot;)
+    public String hello() {
+        return &quot;Hello Spring&quot;;
+    }
+}
+
+</code></pre>
+<p>运行该项目，打开Terminal输入</p>
+<pre><code> curl http://localhost:8080/hello 
+</code></pre>
+<p>就会返回（如下图）</p>
+<pre><code>Hello Spring%  
+</code></pre>
+<figure data-type="image" tabindex="3"><img src="https://s1.ax1x.com/2020/03/22/85SYz8.md.png" alt="image" loading="lazy"></figure>
+<p>在Terminal输入</p>
+<pre><code>curl http://localhost:8080/actuator/health
+得到结果
+{&quot;status&quot;:&quot;UP&quot;}%
+可以检查程序是否正常
+</code></pre>
+<p>执行打包：在Terminal中输入命令:</p>
+<pre><code>mvn clean package -Dmaven.test.skip
+打包完成后输入：ls 
+得到返回结果：
+HELP.md          hello-spring.iml mvnw             mvnw.cmd         pom.xml          src              target
+
+再输入：cd target
+得到返回结果：
+lasses                                  hello-spring-0.0.1-SNAPSHOT.jar          maven-archiver
+generated-sources                        hello-spring-0.0.1-SNAPSHOT.jar.original maven-status
+
+这样就可以得到可执行的jar包用java -jar 就可以运行这个程序如：
+java -jar hello-spring-0.0.1-SNAPSHOT.jar
+
+
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[友盟分享图片错误]]></title>
+        <id>https://github.com/zxianwei.github.io/you-meng-fen-xiang-tu-pian-cuo-wu/</id>
+        <link href="https://github.com/zxianwei.github.io/you-meng-fen-xiang-tu-pian-cuo-wu/">
+        </link>
+        <updated>2018-06-26T04:09:01.000Z</updated>
+        <summary type="html"><![CDATA[<p>最近换工作，前前后后停了很久以后尽量记录写作。<br>
+公司的代码是外包人员编写，遗留了很多的bug入职这几天一直在改bug。发版前一天大家测试出了一个问题：友盟分享一张纯图到微信，缩略图显示错误。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>最近换工作，前前后后停了很久以后尽量记录写作。<br>
+公司的代码是外包人员编写，遗留了很多的bug入职这几天一直在改bug。发版前一天大家测试出了一个问题：友盟分享一张纯图到微信，缩略图显示错误。</p>
+<!--more-->
+<p><img src="https://s1.ax1x.com/2020/03/22/84zk38.md.png" alt="" loading="lazy"><br>
+想到是友盟的错误直接去官网查找吧你会发现：<br>
+<img src="http://p6v8cdcon.bkt.clouddn.com/d56851abd2634f812bbd2d14076e793.png" alt="youmen" loading="lazy"><br>
+按照文档所写的我去查看我们的代码发现是一样的</p>
+<pre><code>private void socialShare(SHARE_MEDIA media, Bitmap bitmap) {
+        UMImage image = new UMImage(context, bitmap);
+        new ShareAction((Activity) context)
+                .setPlatform(media)
+                .withMedia(image)
+                .setCallback(shareListener)
+                .share();
+    }
+</code></pre>
+<p>怎么办呢，我发现友盟人家有Demo然后我就下载来，查看代码运行，发现它分享图片的代码是这样写道的:</p>
+<pre><code> public void shareImageLocal(){
+        UMImage imagelocal = new UMImage(this, R.drawable.logo);
+        imagelocal.setThumb(new UMImage(this, R.drawable.thumb));
+        new ShareAction(ShareDetailActivity.this).withMedia(imagelocal )
+            .setPlatform(share_media)
+            .setCallback(shareListener).share();
+    }
+</code></pre>
+<p>区别在与第三行设置setThumb这个方法就是它设置缩略图的，我觉得如果不设置的它会默认拿你的app图标当缩略图。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[解决Android studio 第一次编译过慢]]></title>
+        <id>https://github.com/zxianwei.github.io/jie-jue-android-studio-di-yi-ci-bian-yi-guo-man/</id>
+        <link href="https://github.com/zxianwei.github.io/jie-jue-android-studio-di-yi-ci-bian-yi-guo-man/">
+        </link>
+        <updated>2018-04-01T12:02:42.000Z</updated>
+        <content type="html"><![CDATA[<p>公司来了一位新的Android 开发同事，上午自己在哪里安装各种软件和IDE工具，到了下午发现他还在哪里“呆”着并没有阅读代码，我过去问他怎么没有看代码啊？他说第一次正在编译很慢需要等着，我想等着是不可能的，嘿嘿热心的我过去帮他解决这问题。</p>
+<figure data-type="image" tabindex="1"><img src="http://upload-images.jianshu.io/upload_images/4148711-9f2cd133b613e347.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image" loading="lazy"></figure>
+<p>这么慢是为什么呢？我们要知其然知其所以然，其实第一次ide安装完成后首次创建项目的时候，它会构建和ide版本匹配的Gradle，第一次本地肯定没有需要下载，由于一些原因咱们的网络会非常非常慢，慢到想砸了电脑，哈哈还是忍住今天就给你解决。</p>
+<p>重点来了解决方法：打第一创建项目后出现如上图的结果的时候等待几秒钟，就关闭它不要等着了，嗯发现关闭了那就任务管理器吧！这个时候找到项目的目录打开最外层的gradle文件查看是多少的版本。</p>
+<figure data-type="image" tabindex="2"><img src="http://upload-images.jianshu.io/upload_images/4148711-4720c0fdbd159b6e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="http://upload-images.jianshu.io/upload_images/4148711-fe378060f7a14a5b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image" loading="lazy"></figure>
+<p>到了这里看到这个项目的Gradle的版本是4.1，然后打开我的电脑下:C:\Users\DELL.gradle\wrapper\dists\gradle-4.1-all\bzyivzo6n839fup2jbap0tjew以我的为例，这个时候肯定会有几个没有下载好的文件，删除它，对就是要删除它，还记的开始说的项目创建好了等几秒再关闭吗？就是让它生成这一段字符，这个时候可以找其他同事把对应版本的压缩包给你，放到这个目录中重新打开ide 很快就会构建成功，再开原来的文件就会有这些文件。</p>
+<figure data-type="image" tabindex="4"><img src="http://upload-images.jianshu.io/upload_images/4148711-3fc034a2062af7cf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image" loading="lazy"></figure>
+<p>有些时候我们会在Github上下载别人的项目学习，也会遇到打开很慢的时候，这个时候找被人要可能没有对应的gradle的包，怎么办？可以去<a href="http://services.gradle.org/distributions/">gradle官网</a>下载对应版本，其实还有个方法：把distributionUrl=的http后的/删除复制到浏览器中就会自动下载了。其实最简单的方法就是：科学。。上网。</p>
+]]></content>
+    </entry>
+</feed>
