@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zxianwei.github.io</id>
     <title>zxianwei</title>
-    <updated>2020-03-22T06:45:43.879Z</updated>
+    <updated>2020-03-22T10:19:18.459Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zxianwei.github.io"/>
     <link rel="self" href="https://zxianwei.github.io/atom.xml"/>
@@ -16,8 +16,12 @@
         <link href="https://zxianwei.github.io/zhen-cang-de-ju-zi/">
         </link>
         <updated>2020-03-22T06:26:14.000Z</updated>
+        <summary type="html"><![CDATA[<p>人民有信仰，国家有力量，民族有希望.</p>
+<p>在生命的旅途里遇见你真好!</p>
+]]></summary>
         <content type="html"><![CDATA[<p>人民有信仰，国家有力量，民族有希望.</p>
 <p>在生命的旅途里遇见你真好!</p>
+<!-- more -->
 <p>卑鄙是卑鄙者的通行证，高尚是高尚者的墓志铭.</p>
 <p>当混浊变成一种常态，清白就是一种罪.</p>
 <p>爱笑的人运气不会太差，运气差的人压根笑不出来.</p>
