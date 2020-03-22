@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://github.com/zxianwei.github.io</id>
+    <id>https://zxianwei.github.io</id>
     <title>zxianwei</title>
-    <updated>2020-03-22T05:15:36.595Z</updated>
+    <updated>2020-03-22T05:20:30.682Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://github.com/zxianwei.github.io"/>
-    <link rel="self" href="https://github.com/zxianwei.github.io/atom.xml"/>
+    <link rel="alternate" href="https://zxianwei.github.io"/>
+    <link rel="self" href="https://zxianwei.github.io/atom.xml"/>
     <subtitle>温故而知新</subtitle>
-    <logo>https://github.com/zxianwei.github.io/images/avatar.png</logo>
-    <icon>https://github.com/zxianwei.github.io/favicon.ico</icon>
+    <logo>https://zxianwei.github.io/images/avatar.png</logo>
+    <icon>https://zxianwei.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, zxianwei</rights>
     <entry>
         <title type="html"><![CDATA[ 全面分析 Spring 的编程式事务管理及声明式事务管理 ]]></title>
-        <id>https://github.com/zxianwei.github.io/zhuan-zai/</id>
-        <link href="https://github.com/zxianwei.github.io/zhuan-zai/">
+        <id>https://zxianwei.github.io/zhuan-zai/</id>
+        <link href="https://zxianwei.github.io/zhuan-zai/">
         </link>
         <updated>2019-07-25T13:21:15.000Z</updated>
         <summary type="html"><![CDATA[<p><a href="https://www.ibm.com/developerworks/cn/education/opensource/os-cn-spring-trans/index.html">全面分析 Spring 的编程式事务管理及声明式事务管理</a></p>
@@ -339,8 +339,8 @@ return bankDao.transfer(fromId， toId， amount);
     </entry>
     <entry>
         <title type="html"><![CDATA[Spring中使用JDBC Template访问数据库]]></title>
-        <id>https://github.com/zxianwei.github.io/spring-zhong-shi-yong-jdbc-template-fang-wen-shu-ju-ku/</id>
-        <link href="https://github.com/zxianwei.github.io/spring-zhong-shi-yong-jdbc-template-fang-wen-shu-ju-ku/">
+        <id>https://zxianwei.github.io/spring-zhong-shi-yong-jdbc-template-fang-wen-shu-ju-ku/</id>
+        <link href="https://zxianwei.github.io/spring-zhong-shi-yong-jdbc-template-fang-wen-shu-ju-ku/">
         </link>
         <updated>2019-07-17T12:58:51.000Z</updated>
         <summary type="html"><![CDATA[<h4 id="简介">简介</h4>
@@ -658,8 +658,8 @@ public class Student {
     </entry>
     <entry>
         <title type="html"><![CDATA[Hello Spring Boot]]></title>
-        <id>https://github.com/zxianwei.github.io/hellospring/</id>
-        <link href="https://github.com/zxianwei.github.io/hellospring/">
+        <id>https://zxianwei.github.io/hellospring/</id>
+        <link href="https://zxianwei.github.io/hellospring/">
         </link>
         <updated>2019-07-15T08:46:22.000Z</updated>
         <summary type="html"><![CDATA[<h4 id="spring-boot">Spring Boot</h4>
@@ -705,13 +705,13 @@ public class Student {
 <h5 id="选择maven-project-java-spring-boot的版本-group和artifact的信息-添加search-dependencies-to-add等信息如下图最后点击generate-project下载压缩包">选择Maven Project、Java、Spring Boot的版本、Group和Artifact的信息、添加Search dependencies to add等信息如下图，最后点击Generate Project下载压缩包</h5>
 </li>
 </ul>
-<figure data-type="image" tabindex="1"><img src="https://github.com/zxianwei.github.io/post-images/1558601345593.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="1"><img src="https://zxianwei.github.io/post-images/1558601345593.png" alt="" loading="lazy"></figure>
 <ul>
 <li>
 <h5 id="将压缩包解压用idea打开该项目打开后的项目结构如下图">将压缩包解压，用IDEA打开该项目，打开后的项目结构如下图：</h5>
 </li>
 </ul>
-<figure data-type="image" tabindex="2"><img src="https://github.com/zxianwei.github.io/post-images/1558601366004.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://zxianwei.github.io/post-images/1558601366004.png" alt="" loading="lazy"></figure>
 <ul>
 <li>
 <h5 id="编写第一行代码">编写第一行代码</h5>
@@ -772,8 +772,8 @@ java -jar hello-spring-0.0.1-SNAPSHOT.jar
     </entry>
     <entry>
         <title type="html"><![CDATA[友盟分享图片错误]]></title>
-        <id>https://github.com/zxianwei.github.io/you-meng-fen-xiang-tu-pian-cuo-wu/</id>
-        <link href="https://github.com/zxianwei.github.io/you-meng-fen-xiang-tu-pian-cuo-wu/">
+        <id>https://zxianwei.github.io/you-meng-fen-xiang-tu-pian-cuo-wu/</id>
+        <link href="https://zxianwei.github.io/you-meng-fen-xiang-tu-pian-cuo-wu/">
         </link>
         <updated>2018-06-26T04:09:01.000Z</updated>
         <summary type="html"><![CDATA[<p>最近换工作，前前后后停了很久以后尽量记录写作。<br>
@@ -809,8 +809,8 @@ java -jar hello-spring-0.0.1-SNAPSHOT.jar
     </entry>
     <entry>
         <title type="html"><![CDATA[解决Android studio 第一次编译过慢]]></title>
-        <id>https://github.com/zxianwei.github.io/jie-jue-android-studio-di-yi-ci-bian-yi-guo-man/</id>
-        <link href="https://github.com/zxianwei.github.io/jie-jue-android-studio-di-yi-ci-bian-yi-guo-man/">
+        <id>https://zxianwei.github.io/jie-jue-android-studio-di-yi-ci-bian-yi-guo-man/</id>
+        <link href="https://zxianwei.github.io/jie-jue-android-studio-di-yi-ci-bian-yi-guo-man/">
         </link>
         <updated>2018-04-01T12:02:42.000Z</updated>
         <content type="html"><![CDATA[<p>公司来了一位新的Android 开发同事，上午自己在哪里安装各种软件和IDE工具，到了下午发现他还在哪里“呆”着并没有阅读代码，我过去问他怎么没有看代码啊？他说第一次正在编译很慢需要等着，我想等着是不可能的，嘿嘿热心的我过去帮他解决这问题。</p>
