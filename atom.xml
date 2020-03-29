@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zxianwei.github.io</id>
     <title>zxianwei</title>
-    <updated>2020-03-22T10:19:18.459Z</updated>
+    <updated>2020-03-29T14:22:28.831Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zxianwei.github.io"/>
     <link rel="self" href="https://zxianwei.github.io/atom.xml"/>
@@ -10,6 +10,27 @@
     <logo>https://zxianwei.github.io/images/avatar.png</logo>
     <icon>https://zxianwei.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, zxianwei</rights>
+    <entry>
+        <title type="html"><![CDATA[Spring Boot 热部署]]></title>
+        <id>https://zxianwei.github.io/spring-boot-re-bu-shu/</id>
+        <link href="https://zxianwei.github.io/spring-boot-re-bu-shu/">
+        </link>
+        <updated>2020-03-29T13:32:07.000Z</updated>
+        <summary type="html"><![CDATA[<p>       在开发调试过程中，已经启动了工程的运行。此时又修改了代码或者配置文件，若要使配置生效，就需要重新启动工程，这种方式降低了开发效率。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>       在开发调试过程中，已经启动了工程的运行。此时又修改了代码或者配置文件，若要使配置生效，就需要重新启动工程，这种方式降低了开发效率。</p>
+<!-- more -->
+<p>       热部署，在修改了代码或者配置一经保存，系统就会对工程自动重启，不需要手动重启。若要实现热部署只需要在配置文件中添加一个依赖即可。</p>
+<pre><code> &lt;dependency&gt;
+    　&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    　&lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>       找到项目的配置然后如图选择，这样做的就是当idea整个窗口被钝化的时候工程就会自动部署。何为窗口钝化就是当应用切换到其他窗口的时候。<br>
+<img src="https://s1.ax1x.com/2020/03/29/GZ6Krd.png" alt="" loading="lazy"></p>
+<p>       自动部署有利也有弊，有利的地方就是无需手动手动重启，弊端就是有些代码还没有修改完毕，切换其他应用的时候也会自动部署，另外自动部署有时会出现一些神奇的bug。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[珍藏的句子]]></title>
         <id>https://zxianwei.github.io/zhen-cang-de-ju-zi/</id>
@@ -844,6 +865,17 @@ java -jar hello-spring-0.0.1-SNAPSHOT.jar
 
 
 </code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[关于]]></title>
+        <id>https://zxianwei.github.io/about/</id>
+        <link href="https://zxianwei.github.io/about/">
+        </link>
+        <updated>2019-01-25T11:09:48.000Z</updated>
+        <content type="html"><![CDATA[<p>爱笑的人运气不会太差</p>
+<p>我叫张贤伟，坐标北京，Android开发现入坑Java。</p>
+<p>写博客原因：总结经验，记录成长。</p>
 ]]></content>
     </entry>
     <entry>

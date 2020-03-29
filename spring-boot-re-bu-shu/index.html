@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>关于 | zxianwei</title>
+<title>Spring Boot 热部署 | zxianwei</title>
 <meta name="description" content="温故而知新">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -104,22 +104,45 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">关于</h2>
-            <div class="post-date">2019-01-25</div>
+            <h2 class="post-title">Spring Boot 热部署</h2>
+            <div class="post-date">2020-03-29</div>
+            
+              <div class="feature-container" style="background-image: url('https://s1.ax1x.com/2020/03/29/GZ2MqJ.jpg')">
+              </div>
             
             <div class="post-content">
-              <p>爱笑的人运气不会太差</p>
-<p>我叫张贤伟，坐标北京，Android开发现入坑Java。</p>
-<p>写博客原因：总结经验，记录成长。</p>
+              <p>       在开发调试过程中，已经启动了工程的运行。此时又修改了代码或者配置文件，若要使配置生效，就需要重新启动工程，这种方式降低了开发效率。</p>
+<!-- more -->
+<p>       热部署，在修改了代码或者配置一经保存，系统就会对工程自动重启，不需要手动重启。若要实现热部署只需要在配置文件中添加一个依赖即可。</p>
+<pre><code> &lt;dependency&gt;
+    　&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    　&lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>       找到项目的配置然后如图选择，这样做的就是当idea整个窗口被钝化的时候工程就会自动部署。何为窗口钝化就是当应用切换到其他窗口的时候。<br>
+<img src="https://s1.ax1x.com/2020/03/29/GZ6Krd.png" alt="" loading="lazy"></p>
+<p>       自动部署有利也有弊，有利的地方就是无需手动手动重启，弊端就是有些代码还没有修改完毕，切换其他应用的时候也会自动部署，另外自动部署有时会出现一些神奇的bug。</p>
 
             </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://zxianwei.github.io/tag/JIdYE2S2L/" class="tag">
+                    Java
+                  </a>
+                
+                  <a href="https://zxianwei.github.io/tag/SX2qS6bYf/" class="tag">
+                    Spring
+                  </a>
+                
+              </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://zxianwei.github.io/you-meng-fen-xiang-tu-pian-cuo-wu/">
+                <a href="https://zxianwei.github.io/zhen-cang-de-ju-zi/">
                   <h3 class="post-title">
-                    友盟分享图片错误
+                    珍藏的句子
                   </h3>
                 </a>
               </div>
