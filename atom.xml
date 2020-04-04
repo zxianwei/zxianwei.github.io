@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zxianwei.github.io</id>
     <title>zxianwei</title>
-    <updated>2020-03-31T02:29:56.284Z</updated>
+    <updated>2020-04-04T18:50:39.831Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zxianwei.github.io"/>
     <link rel="self" href="https://zxianwei.github.io/atom.xml"/>
@@ -759,8 +759,7 @@ public class Student {
         <link href="https://zxianwei.github.io/hellospring/">
         </link>
         <updated>2019-07-15T08:46:22.000Z</updated>
-        <summary type="html"><![CDATA[<h4 id="spring-boot">Spring Boot</h4>
-<h4 id="基于spring构建的应用程序有以下特点">基于Spring构建的应用程序有以下特点</h4>
+        <summary type="html"><![CDATA[<h4 id="基于spring-boot构建的应用程序有以下特点">基于Spring Boot构建的应用程序有以下特点</h4>
 <ul>
 <li>
 <h5 id="快-很快-非常快">快、很快、非常快</h5>
@@ -776,8 +775,7 @@ public class Student {
 </li>
 </ul>
 ]]></summary>
-        <content type="html"><![CDATA[<h4 id="spring-boot">Spring Boot</h4>
-<h4 id="基于spring构建的应用程序有以下特点">基于Spring构建的应用程序有以下特点</h4>
+        <content type="html"><![CDATA[<h4 id="基于spring-boot构建的应用程序有以下特点">基于Spring Boot构建的应用程序有以下特点</h4>
 <ul>
 <li>
 <h5 id="快-很快-非常快">快、很快、非常快</h5>
