@@ -2,14 +2,65 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zxianwei.github.io</id>
     <title>zxianwei</title>
-    <updated>2020-04-06T10:57:21.365Z</updated>
+    <updated>2020-04-06T16:34:10.656Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zxianwei.github.io"/>
     <link rel="self" href="https://zxianwei.github.io/atom.xml"/>
-    <subtitle>温故而知新</subtitle>
+    <subtitle>念念不忘，必有回响。</subtitle>
     <logo>https://zxianwei.github.io/images/avatar.png</logo>
     <icon>https://zxianwei.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, zxianwei</rights>
+    <entry>
+        <title type="html"><![CDATA[Spring Boot 使用jsp]]></title>
+        <id>https://zxianwei.github.io/spring-boot-shi-yong-jsp/</id>
+        <link href="https://zxianwei.github.io/spring-boot-shi-yong-jsp/">
+        </link>
+        <updated>2020-04-06T16:23:44.000Z</updated>
+        <summary type="html"><![CDATA[<p>在Spring Boot中并不推荐使用jsp，如果想要在Spring Boot中使用jsp就需要做专门的配置了。</p>
+<h3 id="1-创建webapp目录">1. 创建webapp目录</h3>
+]]></summary>
+        <content type="html"><![CDATA[<p>在Spring Boot中并不推荐使用jsp，如果想要在Spring Boot中使用jsp就需要做专门的配置了。</p>
+<h3 id="1-创建webapp目录">1. 创建webapp目录</h3>
+<!-- more -->
+<p>在项目/main/目录下创建webapp目录，注意要是和resources、java同级。<br>
+<img src="https://s1.ax1x.com/2020/04/06/G6YOVe.jpg" alt="示意图" loading="lazy"><br>
+创建好了直接在这个目录下新建jsp是不能创建的，如果硬要创建是没有jsp模板的，问题主要在于这个目录不是web资源目录，idea是不能自动识别的，所以咱们要把这个目录变成web资源目录。打开项目的Project Settings(快捷键：command+;)，找到Web Resource Directories点击加号，再选择webapp目录点击OK，最后点击OK保存就好了。<img src="https://s1.ax1x.com/2020/04/07/G6NRh9.gif" alt="示意图" loading="lazy"></p>
+<h3 id="2-创建jsp文件">2. 创建jsp文件</h3>
+<p>我创建了一个hello.jsp的文件，代码如下：</p>
+<pre><code>&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot; language=&quot;java&quot; %&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+   hello jsp
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3 id="3-添加物理视图">3. 添加物理视图</h3>
+<p>打开pom.xml文件添加tomcat-embed-jasper依赖，这个依赖用于解析jsp文件。</p>
+<pre><code>        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.tomcat.embed&lt;/groupId&gt;
+            &lt;artifactId&gt;tomcat-embed-jasper&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+</code></pre>
+<p>然后在build中注册webapp资源目录</p>
+<pre><code>        &lt;resources&gt;
+            &lt;!--注册webapp资源目录--&gt;
+            &lt;resource&gt;
+                &lt;directory&gt;src/main/webapp&lt;/directory&gt;
+                &lt;targetPath&gt;META-INF/resources&lt;/targetPath&gt;
+                &lt;includes&gt;
+                    &lt;include&gt;**/*.*&lt;/include&gt;
+                &lt;/includes&gt;
+            &lt;/resource&gt;
+        &lt;/resources&gt;
+</code></pre>
+<h3 id="4-查看">4. 查看</h3>
+<p>运行项目在浏览器输入：http://localhost:8080/hello.jsp<br>
+<img src="https://s1.ax1x.com/2020/04/07/G6Ur8A.png" alt="示意图" loading="lazy"></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Spring Boot 定义异常页面]]></title>
         <id>https://zxianwei.github.io/spring-boot-ding-yi-yi-chang-ye-mian/</id>
