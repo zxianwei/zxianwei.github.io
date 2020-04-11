@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zxianwei.github.io</id>
     <title>zxianwei</title>
-    <updated>2020-04-06T17:08:48.769Z</updated>
+    <updated>2020-04-11T13:20:07.978Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zxianwei.github.io"/>
     <link rel="self" href="https://zxianwei.github.io/atom.xml"/>
@@ -10,6 +10,20 @@
     <logo>https://zxianwei.github.io/images/avatar.png</logo>
     <icon>https://zxianwei.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, zxianwei</rights>
+    <entry>
+        <title type="html"><![CDATA[Android Studio奇葩问题]]></title>
+        <id>https://zxianwei.github.io/android-studio-qi-pa-wen-ti/</id>
+        <link href="https://zxianwei.github.io/android-studio-qi-pa-wen-ti/">
+        </link>
+        <updated>2020-04-11T13:18:20.000Z</updated>
+        <summary type="html"><![CDATA[<p>突然之间Android Studio 没有了代码提示，打不出比如Button等控件无法导出相应的包。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>突然之间Android Studio 没有了代码提示，打不出比如Button等控件无法导出相应的包。</p>
+<!-- more -->
+<p>可以采用以下方法：<br>
+<img src="https://upload-images.jianshu.io/upload_images/4148711-aba49deb7fd94c42.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" loading="lazy"></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Spring Boot 使用jsp]]></title>
         <id>https://zxianwei.github.io/spring-boot-shi-yong-jsp/</id>

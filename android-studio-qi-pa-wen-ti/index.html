@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>解决Android studio 第一次编译过慢 | zxianwei</title>
+<title>Android Studio奇葩问题 | zxianwei</title>
 <meta name="description" content="念念不忘，必有回响。">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -104,19 +104,14 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">解决Android studio 第一次编译过慢</h2>
-            <div class="post-date">2018-04-01</div>
+            <h2 class="post-title">Android Studio奇葩问题</h2>
+            <div class="post-date">2020-04-11</div>
             
             <div class="post-content">
-              <p>公司来了一位新的Android 开发同事，上午自己在哪里安装各种软件和IDE工具，到了下午发现他还在哪里“呆”着并没有阅读代码，我过去问他怎么没有看代码啊？他说第一次正在编译很慢需要等着，我想等着是不可能的，嘿嘿热心的我过去帮他解决这问题。</p>
-<figure data-type="image" tabindex="1"><img src="http://upload-images.jianshu.io/upload_images/4148711-9f2cd133b613e347.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image" loading="lazy"></figure>
-<p>这么慢是为什么呢？我们要知其然知其所以然，其实第一次ide安装完成后首次创建项目的时候，它会构建和ide版本匹配的Gradle，第一次本地肯定没有需要下载，由于一些原因咱们的网络会非常非常慢，慢到想砸了电脑，哈哈还是忍住今天就给你解决。</p>
-<p>重点来了解决方法：打第一创建项目后出现如上图的结果的时候等待几秒钟，就关闭它不要等着了，嗯发现关闭了那就任务管理器吧！这个时候找到项目的目录打开最外层的gradle文件查看是多少的版本。</p>
-<figure data-type="image" tabindex="2"><img src="http://upload-images.jianshu.io/upload_images/4148711-4720c0fdbd159b6e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image" loading="lazy"></figure>
-<figure data-type="image" tabindex="3"><img src="http://upload-images.jianshu.io/upload_images/4148711-fe378060f7a14a5b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image" loading="lazy"></figure>
-<p>到了这里看到这个项目的Gradle的版本是4.1，然后打开我的电脑下:C:\Users\DELL.gradle\wrapper\dists\gradle-4.1-all\bzyivzo6n839fup2jbap0tjew以我的为例，这个时候肯定会有几个没有下载好的文件，删除它，对就是要删除它，还记的开始说的项目创建好了等几秒再关闭吗？就是让它生成这一段字符，这个时候可以找其他同事把对应版本的压缩包给你，放到这个目录中重新打开ide 很快就会构建成功，再开原来的文件就会有这些文件。</p>
-<figure data-type="image" tabindex="4"><img src="http://upload-images.jianshu.io/upload_images/4148711-3fc034a2062af7cf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image" loading="lazy"></figure>
-<p>有些时候我们会在Github上下载别人的项目学习，也会遇到打开很慢的时候，这个时候找被人要可能没有对应的gradle的包，怎么办？可以去<a href="http://services.gradle.org/distributions/">gradle官网</a>下载对应版本，其实还有个方法：把distributionUrl=的http后的/删除复制到浏览器中就会自动下载了。其实最简单的方法就是：科学。。上网。</p>
+              <p>突然之间Android Studio 没有了代码提示，打不出比如Button等控件无法导出相应的包。</p>
+<!-- more -->
+<p>可以采用以下方法：<br>
+<img src="https://upload-images.jianshu.io/upload_images/4148711-aba49deb7fd94c42.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" loading="lazy"></p>
 
             </div>
             
@@ -128,6 +123,15 @@
                 
               </div>
             
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://zxianwei.github.io/spring-boot-shi-yong-jsp/">
+                  <h3 class="post-title">
+                    Spring Boot 使用jsp
+                  </h3>
+                </a>
+              </div>
             
 
             
