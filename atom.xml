@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zxianwei.github.io</id>
     <title>zxianwei</title>
-    <updated>2020-04-11T13:20:25.930Z</updated>
+    <updated>2020-04-11T13:23:59.156Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zxianwei.github.io"/>
     <link rel="self" href="https://zxianwei.github.io/atom.xml"/>
@@ -16,9 +16,9 @@
         <link href="https://zxianwei.github.io/android-studio-qi-pa-wen-ti/">
         </link>
         <updated>2020-04-11T13:18:20.000Z</updated>
-        <summary type="html"><![CDATA[<p>突然之间Android Studio 没有了代码提示，打不出比如Button等控件无法导出相应的包。</p>
+        <summary type="html"><![CDATA[<p>突然之间Android Studio 没有了代码提示，打不出比如Button等控件无法导入相应的包。</p>
 ]]></summary>
-        <content type="html"><![CDATA[<p>突然之间Android Studio 没有了代码提示，打不出比如Button等控件无法导出相应的包。</p>
+        <content type="html"><![CDATA[<p>突然之间Android Studio 没有了代码提示，打不出比如Button等控件无法导入相应的包。</p>
 <!-- more -->
 <p>可以采用以下方法：<br>
 <img src="https://upload-images.jianshu.io/upload_images/4148711-aba49deb7fd94c42.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" loading="lazy"></p>
