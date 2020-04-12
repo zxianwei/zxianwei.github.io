@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Spring Boot中使用MyBatis详解 | zxianwei</title>
+<meta name="description" content="念念不忘，必有回响。">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://zxianwei.github.io/favicon.ico?v=1586706376102">
+<link rel="stylesheet" href="https://zxianwei.github.io/styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-161569162-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-161569162-1');
+</script>
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://zxianwei.github.io">
+        <img src="https://zxianwei.github.io/images/avatar.png?v=1586706376102" class="site-logo">
+        <h1 class="site-title">zxianwei</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/zxianwei" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      念念不忘，必有回响。
+    </div>
+    <div class="site-footer">
+      
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Spring Boot中使用MyBatis详解</h2>
+            <div class="post-date">2020-04-12</div>
+            
+              <div class="feature-container" style="background-image: url('https://s1.ax1x.com/2020/04/12/GOxgYj.jpg')">
+              </div>
+            
+            <div class="post-content">
+              <p>今天给大家介绍如何在Spring Boot中使用MyBatis，希望大家喜欢。</p>
+<h4 id="1-创建项目">1. 创建项目</h4>
+<p>关于如何创建Spring Boot的项目，大家可以参考我的<a href="https://zxianwei.github.io/hellospring/">《Hello Spring Boot》</a>里面有详细介绍。</p>
+<!-- more -->
+<h4 id="2-导入依赖">2. 导入依赖</h4>
+<p>在Spring Boot中使用MyBatis主要用到了三个依赖：MyBatis和Spring Boot 整合依赖、MySQL驱动依赖、Druid依赖。基于本文还需要另外两个依赖：jsp解析器、lombok。下面展示一下我的pom文件:</p>
+<pre><code class="language-xml"> &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.tomcat.embed&lt;/groupId&gt;
+            &lt;artifactId&gt;tomcat-embed-jasper&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+        &lt;!--MyBatis和Spring Bot整合框架--&gt;
+        &lt;!-- https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;
+            &lt;version&gt;2.1.2&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;!--mysql驱动依赖--&gt;
+        &lt;!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;mysql&lt;/groupId&gt;
+            &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+        &lt;!-- Druid依赖--&gt;
+        &lt;!-- https://mvnrepository.com/artifact/com.alibaba/druid --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+            &lt;artifactId&gt;druid&lt;/artifactId&gt;
+            &lt;version&gt;1.1.22&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+            &lt;artifactId&gt;lombok&lt;/artifactId&gt;
+            &lt;optional&gt;true&lt;/optional&gt;
+        &lt;/dependency&gt;
+
+
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+            &lt;exclusions&gt;
+                &lt;exclusion&gt;
+                    &lt;groupId&gt;org.junit.vintage&lt;/groupId&gt;
+                    &lt;artifactId&gt;junit-vintage-engine&lt;/artifactId&gt;
+                &lt;/exclusion&gt;
+            &lt;/exclusions&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+
+    &lt;build&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+
+        &lt;resources&gt;
+            &lt;!--注册webapp资源目录--&gt;
+            &lt;resource&gt;
+                &lt;directory&gt;src/main/webapp&lt;/directory&gt;
+                &lt;targetPath&gt;META-INF/resources&lt;/targetPath&gt;
+                &lt;includes&gt;
+                    &lt;include&gt;**/*.*&lt;/include&gt;
+                &lt;/includes&gt;
+            &lt;/resource&gt;
+            &lt;!--注册dao包下mybatis映射文件为资源目录--&gt;
+            &lt;resource&gt;
+                &lt;directory&gt;src/main/java&lt;/directory&gt;
+                &lt;includes&gt;
+                    &lt;include&gt;**/*.xml&lt;/include&gt;
+                &lt;/includes&gt;
+            &lt;/resource&gt;
+        &lt;/resources&gt;
+    &lt;/build&gt;
+</code></pre>
+<p><strong>org.mybatis.spring.boot 这个依赖的版本号是不能省去</strong>，因为这个依赖是MyBatis整合的Spring Boot，而不是Spring Boot整合的它，所以不能省掉。<br>
+<strong>resources</strong>中的两个配置分别是注册webapp为资源目录、注册MyBatis的资源目录。<br>
+看到这么多依赖肯定有小伙伴问，我是从哪里知道的，大家可以访问这个<a href="https://mvnrepository.com/">网址</a>查找。</p>
+<h4 id="3-创建jsp">3. 创建Jsp</h4>
+<p>如何在Spring Boot中使用Jsp大家可以参考<a href="https://zxianwei.github.io/spring-boot-shi-yong-jsp/">《Spring Boot 使用jsp》</a>，创建两个jsp文件分别是：index.jsp、success.jsp他们用来提交表单和展示结果。</p>
+<pre><code class="language-javascript">&lt;%--
+  Created by IntelliJ IDEA.
+  User: zhangxianwei
+  Date: 2020/4/12
+  Time: 12:55 下午
+  To change this template use File | Settings | File Templates.
+--%&gt;
+&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot; language=&quot;java&quot; %&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;form action=&quot;register&quot; method=&quot;post&quot;&gt;
+    诗句：&lt;input type=&quot;text&quot; name=&quot;verse&quot; style=&quot;width: 200px&quot;&gt;
+    &lt;br&gt;
+    &lt;br&gt;
+    作者：&lt;input type=&quot;text&quot; name=&quot;author&quot; style=&quot;width: 200px&quot;&gt;
+    &lt;br&gt;
+    &lt;br&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;提交&quot;&gt;
+&lt;/form&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<pre><code class="language-javascript">&lt;%--
+  Created by IntelliJ IDEA.
+  User: zhangxianwei
+  Date: 2020/4/12
+  Time: 1:26 下午
+  To change this template use File | Settings | File Templates.
+--%&gt;
+&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot; language=&quot;java&quot; %&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h5&gt;提交成功&lt;/h5&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h4 id="4创建数据库">4.创建数据库</h4>
+<p>使用Navicat创建了一个poetry的表：<img src="https://img-blog.csdnimg.cn/20200412215820686.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2Njk2MzIw,size_16,color_FFFFFF,t_70" alt="示意图" loading="lazy"></p>
+<h4 id="5创建实体类">5.创建实体类</h4>
+<p>在项目的包名下创建一个目录名为：bean,再创建一个PoetryBean的类：</p>
+<pre><code class="language-java">package com.zxw.mybatis.bean;
+
+import lombok.Data;
+
+@Data
+public class PoetryBean {
+    private Integer id;
+    private String verse;
+    private String author;
+}
+</code></pre>
+<h4 id="6创建dao层">6.创建dao层</h4>
+<p>在项目的包名下创建一个目录名为：dao，再创建一个接口PoetryDao，不要忘记加上@Mapper注解。</p>
+<pre><code class="language-java">package com.zxw.mybatis.dao;
+
+import com.zxw.mybatis.bean.PoetryBean;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface PoetryDao {
+
+    void insertVerse(PoetryBean poetryBean);
+}
+</code></pre>
+<p>然后在resources目录下创建与其对应的配置文件：PoetryDao.xml</p>
+<pre><code class="language-javascript">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE mapper
+        PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
+        &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+&lt;mapper namespace=&quot;com.zxw.mybatis.dao.PoetryDao&quot;&gt;
+    &lt;insert id=&quot;insertVerse&quot;&gt;
+     INSERT INTO poetry(verse,author ) VALUES (#{verse},#{author})
+     &lt;/insert&gt;
+&lt;/mapper&gt;
+</code></pre>
+<p>首先这里面的id要和上面的方法一一对应，然后再写SQL语句就好了，这里推荐一个MybatisX的插件(类似于eventbus3-intellij-plugin这个插件)，装上这个插件就可以直接定位到xml防止写错，而且这个插件很强大，感兴趣的去它的<a href="https://mybatis.plus/">官网</a>。</p>
+<h4 id="7创建service">7.创建service</h4>
+<p>在项目的包名下创建一个目录名为：service，再创建接口PoetryService：</p>
+<pre><code class="language-java">package com.zxw.mybatis.service;
+
+import com.zxw.mybatis.bean.PoetryBean;
+
+public interface PoetryService {
+
+    void addVerse(PoetryBean poetryBean);
+}
+</code></pre>
+<p>创建实现类PoetryServiceImpl：</p>
+<pre><code class="language-java">package com.zxw.mybatis.service;
+
+import com.zxw.mybatis.bean.PoetryBean;
+import com.zxw.mybatis.dao.PoetryDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class PoetryServiceImpl implements PoetryService {
+
+    @Autowired
+    PoetryDao poetryDao;
+
+    @Override
+    public void addVerse(PoetryBean poetryBean) {
+        poetryDao.insertVerse(poetryBean);
+    }
+}
+</code></pre>
+<p>这个类中不要忘记加上@Service这个注解，我当时就是忘记加而报错了。</p>
+<h4 id="8创建controller">8.创建Controller</h4>
+<p>在项目的包名下载创建一个目录名为：controller，再创建类PoetryController：</p>
+<pre><code class="language-java">package com.zxw.mybatis.controller;
+
+import com.zxw.mybatis.bean.PoetryBean;
+import com.zxw.mybatis.service.PoetryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+
+@Controller
+public class PoetryController {
+
+    @Autowired
+    private PoetryService poetryService;
+
+    @PostMapping(&quot;/register&quot;)
+    private String registerVerse(PoetryBean poetryBean) {
+        poetryService.addVerse(poetryBean);
+        return &quot;success&quot;;
+    }
+}
+
+</code></pre>
+<p>这个段代码就是当诗词提交成功后，返回success这个jsp用来通知提交成功。</p>
+<h4 id="9配置">9.配置</h4>
+<p>在application.properties文件中做一下配置：</p>
+<pre><code class="language-javascript"># 视图的前辍与后辍
+spring.mvc.view.prefix=/
+spring.mvc.view.suffix=.jsp
+
+# 注册映射文件
+mybatis.mapper-locations=classpath:PoetryDao.xml
+# 注册实体类别名
+mybatis.type-aliases-package=com.zxw.mybatis.bean
+# 注册数据源类型
+spring.datasource.type=com.alibaba.druid.pool.DruidDataSource
+# 连接数据库
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql:///db1
+spring.datasource.username=root
+spring.datasource.password=zxw12345
+</code></pre>
+<h4 id="10检查">10.检查</h4>
+<p>运行项目添加诗句检查结果如图：<br>
+<img src="https://img-blog.csdnimg.cn/20200412230814743.gif" alt="在这里插入图片描述" loading="lazy"></p>
+<h4 id="总结">总结</h4>
+<p>以上就是在Spring Boot中使用MyBatis详细步骤，总结如下：</p>
+<ul>
+<li>在pom文件找那个添加：MyBatis与Spring Boot整合依赖、MySQL驱动依赖，和Druid依赖。</li>
+<li>在配置文件中添加：映射文件、实体类别名，及数据源。</li>
+<li>在Dao接口上添加@Mapper注解。</li>
+</ul>
+<blockquote>
+<p>项目地址：<a href="https://github.com/zxianwei/HelloSpringBoot">HelloSpringBoot</a></p>
+</blockquote>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://zxianwei.github.io/JIdYE2S2L/" class="tag">
+                    Java
+                  </a>
+                
+                  <a href="https://zxianwei.github.io/SX2qS6bYf/" class="tag">
+                    Spring
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://zxianwei.github.io/android-studio-qi-pa-wen-ti/">
+                  <h3 class="post-title">
+                    Android Studio奇葩问题
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>

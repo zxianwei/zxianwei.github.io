@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zxianwei.github.io</id>
     <title>zxianwei</title>
-    <updated>2020-04-11T13:24:12.534Z</updated>
+    <updated>2020-04-12T15:49:43.220Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zxianwei.github.io"/>
     <link rel="self" href="https://zxianwei.github.io/atom.xml"/>
@@ -10,6 +10,279 @@
     <logo>https://zxianwei.github.io/images/avatar.png</logo>
     <icon>https://zxianwei.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, zxianwei</rights>
+    <entry>
+        <title type="html"><![CDATA[Spring Boot中使用MyBatis详解]]></title>
+        <id>https://zxianwei.github.io/spring-boot-zhong-shi-yong-mybatis-xiang-jie/</id>
+        <link href="https://zxianwei.github.io/spring-boot-zhong-shi-yong-mybatis-xiang-jie/">
+        </link>
+        <updated>2020-04-12T15:38:39.000Z</updated>
+        <summary type="html"><![CDATA[<p>今天给大家介绍如何在Spring Boot中使用MyBatis，希望大家喜欢。</p>
+<h4 id="1-创建项目">1. 创建项目</h4>
+<p>关于如何创建Spring Boot的项目，大家可以参考我的<a href="https://zxianwei.github.io/hellospring/">《Hello Spring Boot》</a>里面有详细介绍。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>今天给大家介绍如何在Spring Boot中使用MyBatis，希望大家喜欢。</p>
+<h4 id="1-创建项目">1. 创建项目</h4>
+<p>关于如何创建Spring Boot的项目，大家可以参考我的<a href="https://zxianwei.github.io/hellospring/">《Hello Spring Boot》</a>里面有详细介绍。</p>
+<!-- more -->
+<h4 id="2-导入依赖">2. 导入依赖</h4>
+<p>在Spring Boot中使用MyBatis主要用到了三个依赖：MyBatis和Spring Boot 整合依赖、MySQL驱动依赖、Druid依赖。基于本文还需要另外两个依赖：jsp解析器、lombok。下面展示一下我的pom文件:</p>
+<pre><code class="language-xml"> &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.tomcat.embed&lt;/groupId&gt;
+            &lt;artifactId&gt;tomcat-embed-jasper&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+        &lt;!--MyBatis和Spring Bot整合框架--&gt;
+        &lt;!-- https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;
+            &lt;version&gt;2.1.2&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;!--mysql驱动依赖--&gt;
+        &lt;!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;mysql&lt;/groupId&gt;
+            &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+        &lt;!-- Druid依赖--&gt;
+        &lt;!-- https://mvnrepository.com/artifact/com.alibaba/druid --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+            &lt;artifactId&gt;druid&lt;/artifactId&gt;
+            &lt;version&gt;1.1.22&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+            &lt;artifactId&gt;lombok&lt;/artifactId&gt;
+            &lt;optional&gt;true&lt;/optional&gt;
+        &lt;/dependency&gt;
+
+
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+            &lt;exclusions&gt;
+                &lt;exclusion&gt;
+                    &lt;groupId&gt;org.junit.vintage&lt;/groupId&gt;
+                    &lt;artifactId&gt;junit-vintage-engine&lt;/artifactId&gt;
+                &lt;/exclusion&gt;
+            &lt;/exclusions&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+
+    &lt;build&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+
+        &lt;resources&gt;
+            &lt;!--注册webapp资源目录--&gt;
+            &lt;resource&gt;
+                &lt;directory&gt;src/main/webapp&lt;/directory&gt;
+                &lt;targetPath&gt;META-INF/resources&lt;/targetPath&gt;
+                &lt;includes&gt;
+                    &lt;include&gt;**/*.*&lt;/include&gt;
+                &lt;/includes&gt;
+            &lt;/resource&gt;
+            &lt;!--注册dao包下mybatis映射文件为资源目录--&gt;
+            &lt;resource&gt;
+                &lt;directory&gt;src/main/java&lt;/directory&gt;
+                &lt;includes&gt;
+                    &lt;include&gt;**/*.xml&lt;/include&gt;
+                &lt;/includes&gt;
+            &lt;/resource&gt;
+        &lt;/resources&gt;
+    &lt;/build&gt;
+</code></pre>
+<p><strong>org.mybatis.spring.boot 这个依赖的版本号是不能省去</strong>，因为这个依赖是MyBatis整合的Spring Boot，而不是Spring Boot整合的它，所以不能省掉。<br>
+<strong>resources</strong>中的两个配置分别是注册webapp为资源目录、注册MyBatis的资源目录。<br>
+看到这么多依赖肯定有小伙伴问，我是从哪里知道的，大家可以访问这个<a href="https://mvnrepository.com/">网址</a>查找。</p>
+<h4 id="3-创建jsp">3. 创建Jsp</h4>
+<p>如何在Spring Boot中使用Jsp大家可以参考<a href="https://zxianwei.github.io/spring-boot-shi-yong-jsp/">《Spring Boot 使用jsp》</a>，创建两个jsp文件分别是：index.jsp、success.jsp他们用来提交表单和展示结果。</p>
+<pre><code class="language-javascript">&lt;%--
+  Created by IntelliJ IDEA.
+  User: zhangxianwei
+  Date: 2020/4/12
+  Time: 12:55 下午
+  To change this template use File | Settings | File Templates.
+--%&gt;
+&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot; language=&quot;java&quot; %&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;form action=&quot;register&quot; method=&quot;post&quot;&gt;
+    诗句：&lt;input type=&quot;text&quot; name=&quot;verse&quot; style=&quot;width: 200px&quot;&gt;
+    &lt;br&gt;
+    &lt;br&gt;
+    作者：&lt;input type=&quot;text&quot; name=&quot;author&quot; style=&quot;width: 200px&quot;&gt;
+    &lt;br&gt;
+    &lt;br&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;提交&quot;&gt;
+&lt;/form&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<pre><code class="language-javascript">&lt;%--
+  Created by IntelliJ IDEA.
+  User: zhangxianwei
+  Date: 2020/4/12
+  Time: 1:26 下午
+  To change this template use File | Settings | File Templates.
+--%&gt;
+&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot; language=&quot;java&quot; %&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h5&gt;提交成功&lt;/h5&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h4 id="4创建数据库">4.创建数据库</h4>
+<p>使用Navicat创建了一个poetry的表：<img src="https://img-blog.csdnimg.cn/20200412215820686.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2Njk2MzIw,size_16,color_FFFFFF,t_70" alt="示意图" loading="lazy"></p>
+<h4 id="5创建实体类">5.创建实体类</h4>
+<p>在项目的包名下创建一个目录名为：bean,再创建一个PoetryBean的类：</p>
+<pre><code class="language-java">package com.zxw.mybatis.bean;
+
+import lombok.Data;
+
+@Data
+public class PoetryBean {
+    private Integer id;
+    private String verse;
+    private String author;
+}
+</code></pre>
+<h4 id="6创建dao层">6.创建dao层</h4>
+<p>在项目的包名下创建一个目录名为：dao，再创建一个接口PoetryDao，不要忘记加上@Mapper注解。</p>
+<pre><code class="language-java">package com.zxw.mybatis.dao;
+
+import com.zxw.mybatis.bean.PoetryBean;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface PoetryDao {
+
+    void insertVerse(PoetryBean poetryBean);
+}
+</code></pre>
+<p>然后在resources目录下创建与其对应的配置文件：PoetryDao.xml</p>
+<pre><code class="language-javascript">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE mapper
+        PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
+        &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+&lt;mapper namespace=&quot;com.zxw.mybatis.dao.PoetryDao&quot;&gt;
+    &lt;insert id=&quot;insertVerse&quot;&gt;
+     INSERT INTO poetry(verse,author ) VALUES (#{verse},#{author})
+     &lt;/insert&gt;
+&lt;/mapper&gt;
+</code></pre>
+<p>首先这里面的id要和上面的方法一一对应，然后再写SQL语句就好了，这里推荐一个MybatisX的插件(类似于eventbus3-intellij-plugin这个插件)，装上这个插件就可以直接定位到xml防止写错，而且这个插件很强大，感兴趣的去它的<a href="https://mybatis.plus/">官网</a>。</p>
+<h4 id="7创建service">7.创建service</h4>
+<p>在项目的包名下创建一个目录名为：service，再创建接口PoetryService：</p>
+<pre><code class="language-java">package com.zxw.mybatis.service;
+
+import com.zxw.mybatis.bean.PoetryBean;
+
+public interface PoetryService {
+
+    void addVerse(PoetryBean poetryBean);
+}
+</code></pre>
+<p>创建实现类PoetryServiceImpl：</p>
+<pre><code class="language-java">package com.zxw.mybatis.service;
+
+import com.zxw.mybatis.bean.PoetryBean;
+import com.zxw.mybatis.dao.PoetryDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class PoetryServiceImpl implements PoetryService {
+
+    @Autowired
+    PoetryDao poetryDao;
+
+    @Override
+    public void addVerse(PoetryBean poetryBean) {
+        poetryDao.insertVerse(poetryBean);
+    }
+}
+</code></pre>
+<p>这个类中不要忘记加上@Service这个注解，我当时就是忘记加而报错了。</p>
+<h4 id="8创建controller">8.创建Controller</h4>
+<p>在项目的包名下载创建一个目录名为：controller，再创建类PoetryController：</p>
+<pre><code class="language-java">package com.zxw.mybatis.controller;
+
+import com.zxw.mybatis.bean.PoetryBean;
+import com.zxw.mybatis.service.PoetryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+
+@Controller
+public class PoetryController {
+
+    @Autowired
+    private PoetryService poetryService;
+
+    @PostMapping(&quot;/register&quot;)
+    private String registerVerse(PoetryBean poetryBean) {
+        poetryService.addVerse(poetryBean);
+        return &quot;success&quot;;
+    }
+}
+
+</code></pre>
+<p>这个段代码就是当诗词提交成功后，返回success这个jsp用来通知提交成功。</p>
+<h4 id="9配置">9.配置</h4>
+<p>在application.properties文件中做一下配置：</p>
+<pre><code class="language-javascript"># 视图的前辍与后辍
+spring.mvc.view.prefix=/
+spring.mvc.view.suffix=.jsp
+
+# 注册映射文件
+mybatis.mapper-locations=classpath:PoetryDao.xml
+# 注册实体类别名
+mybatis.type-aliases-package=com.zxw.mybatis.bean
+# 注册数据源类型
+spring.datasource.type=com.alibaba.druid.pool.DruidDataSource
+# 连接数据库
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql:///db1
+spring.datasource.username=root
+spring.datasource.password=zxw12345
+</code></pre>
+<h4 id="10检查">10.检查</h4>
+<p>运行项目添加诗句检查结果如图：<br>
+<img src="https://img-blog.csdnimg.cn/20200412230814743.gif" alt="在这里插入图片描述" loading="lazy"></p>
+<h4 id="总结">总结</h4>
+<p>以上就是在Spring Boot中使用MyBatis详细步骤，总结如下：</p>
+<ul>
+<li>在pom文件找那个添加：MyBatis与Spring Boot整合依赖、MySQL驱动依赖，和Druid依赖。</li>
+<li>在配置文件中添加：映射文件、实体类别名，及数据源。</li>
+<li>在Dao接口上添加@Mapper注解。</li>
+</ul>
+<blockquote>
+<p>项目地址：<a href="https://github.com/zxianwei/HelloSpringBoot">HelloSpringBoot</a></p>
+</blockquote>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Android Studio奇葩问题]]></title>
         <id>https://zxianwei.github.io/android-studio-qi-pa-wen-ti/</id>
@@ -984,23 +1257,6 @@ java -jar hello-spring-0.0.1-SNAPSHOT.jar
     }
 </code></pre>
 <p>区别在与第三行设置setThumb这个方法就是它设置缩略图的，我觉得如果不设置的它会默认拿你的app图标当缩略图。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[解决Android studio 第一次编译过慢]]></title>
-        <id>https://zxianwei.github.io/jie-jue-android-studio-di-yi-ci-bian-yi-guo-man/</id>
-        <link href="https://zxianwei.github.io/jie-jue-android-studio-di-yi-ci-bian-yi-guo-man/">
-        </link>
-        <updated>2018-04-01T12:02:42.000Z</updated>
-        <content type="html"><![CDATA[<p>公司来了一位新的Android 开发同事，上午自己在哪里安装各种软件和IDE工具，到了下午发现他还在哪里“呆”着并没有阅读代码，我过去问他怎么没有看代码啊？他说第一次正在编译很慢需要等着，我想等着是不可能的，嘿嘿热心的我过去帮他解决这问题。</p>
-<figure data-type="image" tabindex="1"><img src="http://upload-images.jianshu.io/upload_images/4148711-9f2cd133b613e347.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image" loading="lazy"></figure>
-<p>这么慢是为什么呢？我们要知其然知其所以然，其实第一次ide安装完成后首次创建项目的时候，它会构建和ide版本匹配的Gradle，第一次本地肯定没有需要下载，由于一些原因咱们的网络会非常非常慢，慢到想砸了电脑，哈哈还是忍住今天就给你解决。</p>
-<p>重点来了解决方法：打第一创建项目后出现如上图的结果的时候等待几秒钟，就关闭它不要等着了，嗯发现关闭了那就任务管理器吧！这个时候找到项目的目录打开最外层的gradle文件查看是多少的版本。</p>
-<figure data-type="image" tabindex="2"><img src="http://upload-images.jianshu.io/upload_images/4148711-4720c0fdbd159b6e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image" loading="lazy"></figure>
-<figure data-type="image" tabindex="3"><img src="http://upload-images.jianshu.io/upload_images/4148711-fe378060f7a14a5b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image" loading="lazy"></figure>
-<p>到了这里看到这个项目的Gradle的版本是4.1，然后打开我的电脑下:C:\Users\DELL.gradle\wrapper\dists\gradle-4.1-all\bzyivzo6n839fup2jbap0tjew以我的为例，这个时候肯定会有几个没有下载好的文件，删除它，对就是要删除它，还记的开始说的项目创建好了等几秒再关闭吗？就是让它生成这一段字符，这个时候可以找其他同事把对应版本的压缩包给你，放到这个目录中重新打开ide 很快就会构建成功，再开原来的文件就会有这些文件。</p>
-<figure data-type="image" tabindex="4"><img src="http://upload-images.jianshu.io/upload_images/4148711-3fc034a2062af7cf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image" loading="lazy"></figure>
-<p>有些时候我们会在Github上下载别人的项目学习，也会遇到打开很慢的时候，这个时候找被人要可能没有对应的gradle的包，怎么办？可以去<a href="http://services.gradle.org/distributions/">gradle官网</a>下载对应版本，其实还有个方法：把distributionUrl=的http后的/删除复制到浏览器中就会自动下载了。其实最简单的方法就是：科学。。上网。</p>
 ]]></content>
     </entry>
 </feed>
