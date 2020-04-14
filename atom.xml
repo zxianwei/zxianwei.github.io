@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zxianwei.github.io</id>
     <title>zxianwei</title>
-    <updated>2020-04-14T05:47:38.842Z</updated>
+    <updated>2020-04-14T05:52:22.467Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zxianwei.github.io"/>
     <link rel="self" href="https://zxianwei.github.io/atom.xml"/>
@@ -23,7 +23,7 @@
 <strong>说到事务，那什么是事务呢？</strong></p>
 <!-- more -->
 <blockquote>
-<p>       事务（Transaction），一般是指要做的或所做的事情。</p>
+<p>事务（Transaction），一般是指要做的或所做的事情。</p>
 <ul>
 <li><strong>原子性（Atomicity）</strong>：事务作为一个整体被执行，包含在其中的对数据库的操作要么全部被执行，要么都不执行。</li>
 <li><strong>一致性（Consistency）</strong>：事务应确保数据库的状态从一个一致状态转变为另一个一致状态。一致状态的含义是数据库中的数据应满足完整性约束。</li>
