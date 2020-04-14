@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zxianwei.github.io</id>
     <title>zxianwei</title>
-    <updated>2020-04-12T15:50:16.693Z</updated>
+    <updated>2020-04-14T05:47:25.710Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zxianwei.github.io"/>
     <link rel="self" href="https://zxianwei.github.io/atom.xml"/>
@@ -10,6 +10,83 @@
     <logo>https://zxianwei.github.io/images/avatar.png</logo>
     <icon>https://zxianwei.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, zxianwei</rights>
+    <entry>
+        <title type="html"><![CDATA[如何在Spring Boot开启事务]]></title>
+        <id>https://zxianwei.github.io/ru-he-zai-spring-boot-kai-qi-shi-wu/</id>
+        <link href="https://zxianwei.github.io/ru-he-zai-spring-boot-kai-qi-shi-wu/">
+        </link>
+        <updated>2020-04-14T05:45:12.000Z</updated>
+        <summary type="html"><![CDATA[<p>今天给大家介绍如何在Spring Boot中开启事务，希望大家喜欢。<br>
+<strong>说到事务，那什么是事务呢？</strong></p>
+]]></summary>
+        <content type="html"><![CDATA[<p>今天给大家介绍如何在Spring Boot中开启事务，希望大家喜欢。<br>
+<strong>说到事务，那什么是事务呢？</strong></p>
+<!-- more -->
+<blockquote>
+<p>       事务（Transaction），一般是指要做的或所做的事情。</p>
+<ul>
+<li><strong>原子性（Atomicity）</strong>：事务作为一个整体被执行，包含在其中的对数据库的操作要么全部被执行，要么都不执行。</li>
+<li><strong>一致性（Consistency）</strong>：事务应确保数据库的状态从一个一致状态转变为另一个一致状态。一致状态的含义是数据库中的数据应满足完整性约束。</li>
+<li><strong>隔离性（Isolation）</strong>：多个事务并发执行时，一个事务的执行不应影响其他事务的执行。</li>
+<li><strong>持久性（Durability）</strong>：已被提交的事务对数据库的修改应该永久保存在数据库中。</li>
+</ul>
+</blockquote>
+<p>那么如何在Spring Boot中使用呢？其实只需要两步即可：</p>
+<ol>
+<li>在Application上添加@EnableTransactionManagement注解，用来开启事务。</li>
+<li>在Service实现类的方法上添加@Transactional注解。</li>
+</ol>
+<p><strong>具体实现：</strong><br>
+使用<a href="https://blog.csdn.net/m0_46696320/article/details/105472191">《Spring Boot中使用MyBatis详解》</a>的代码，在TransactionalApplication启动类上添加@EnableTransactionManagement注解开启事务：</p>
+<pre><code class="language-java">package com.zxw.transactional;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+@SpringBootApplication
+//开启事务
+@EnableTransactionManagement
+public class TransactionalApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(TransactionalApplication.class, args);
+    }
+
+}
+</code></pre>
+<p>在Service实现方法上添加@Transactional注解：</p>
+<pre><code class="language-java">package com.zxw.transactional.controller;
+
+import com.zxw.transactional.bean.PoetryBean;
+import com.zxw.transactional.service.PoetryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
+
+@Controller
+public class PoetryController {
+
+    @Autowired
+    private PoetryService poetryService;
+
+    @Transactional
+    @PostMapping(&quot;/register&quot;)
+    public String registerVerse(PoetryBean poetryBean) {
+        poetryService.addVerse(poetryBean);
+        int i = 3 / 0;
+        poetryService.addVerse(poetryBean);
+        return &quot;success&quot;;
+    }
+}
+</code></pre>
+<p>我在registerVerse方法添加了int i = 3 / 0;的代码，这段代码肯定会报错，在加了@Transactional注解后，我们看下可以往数据库插入几条数据？如果把@Transactional注解去掉又能添加几条呢？大家可以试试。</p>
+<blockquote>
+<p>项目地址：<a href="https://github.com/zxianwei/HelloSpringBoot">HelloSpringBoot</a></p>
+</blockquote>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Spring Boot中使用MyBatis详解]]></title>
         <id>https://zxianwei.github.io/spring-boot-zhong-shi-yong-mybatis-xiang-jie/</id>
@@ -1220,43 +1297,6 @@ java -jar hello-spring-0.0.1-SNAPSHOT.jar
 
 
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[友盟分享图片错误]]></title>
-        <id>https://zxianwei.github.io/you-meng-fen-xiang-tu-pian-cuo-wu/</id>
-        <link href="https://zxianwei.github.io/you-meng-fen-xiang-tu-pian-cuo-wu/">
-        </link>
-        <updated>2018-06-26T04:09:01.000Z</updated>
-        <summary type="html"><![CDATA[<p>最近换工作，前前后后停了很久以后尽量记录写作。<br>
-公司的代码是外包人员编写，遗留了很多的bug入职这几天一直在改bug。发版前一天大家测试出了一个问题：友盟分享一张纯图到微信，缩略图显示错误。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>最近换工作，前前后后停了很久以后尽量记录写作。<br>
-公司的代码是外包人员编写，遗留了很多的bug入职这几天一直在改bug。发版前一天大家测试出了一个问题：友盟分享一张纯图到微信，缩略图显示错误。</p>
-<!--more-->
-<p><img src="https://s1.ax1x.com/2020/03/22/84zk38.md.png" alt="" loading="lazy"><br>
-想到是友盟的错误直接去官网查找吧你会发现：<br>
-<img src="http://p6v8cdcon.bkt.clouddn.com/d56851abd2634f812bbd2d14076e793.png" alt="youmen" loading="lazy"><br>
-按照文档所写的我去查看我们的代码发现是一样的</p>
-<pre><code>private void socialShare(SHARE_MEDIA media, Bitmap bitmap) {
-        UMImage image = new UMImage(context, bitmap);
-        new ShareAction((Activity) context)
-                .setPlatform(media)
-                .withMedia(image)
-                .setCallback(shareListener)
-                .share();
-    }
-</code></pre>
-<p>怎么办呢，我发现友盟人家有Demo然后我就下载来，查看代码运行，发现它分享图片的代码是这样写道的:</p>
-<pre><code> public void shareImageLocal(){
-        UMImage imagelocal = new UMImage(this, R.drawable.logo);
-        imagelocal.setThumb(new UMImage(this, R.drawable.thumb));
-        new ShareAction(ShareDetailActivity.this).withMedia(imagelocal )
-            .setPlatform(share_media)
-            .setCallback(shareListener).share();
-    }
-</code></pre>
-<p>区别在与第三行设置setThumb这个方法就是它设置缩略图的，我觉得如果不设置的它会默认拿你的app图标当缩略图。</p>
 ]]></content>
     </entry>
 </feed>

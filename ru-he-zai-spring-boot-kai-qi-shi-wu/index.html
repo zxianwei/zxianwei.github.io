@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>如何在Spring Boot开启事务 | zxianwei</title>
+<meta name="description" content="念念不忘，必有回响。">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://zxianwei.github.io/favicon.ico?v=1586843217897">
+<link rel="stylesheet" href="https://zxianwei.github.io/styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-161569162-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-161569162-1');
+</script>
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://zxianwei.github.io">
+        <img src="https://zxianwei.github.io/images/avatar.png?v=1586843217897" class="site-logo">
+        <h1 class="site-title">zxianwei</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/zxianwei" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      念念不忘，必有回响。
+    </div>
+    <div class="site-footer">
+      
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">如何在Spring Boot开启事务</h2>
+            <div class="post-date">2020-04-14</div>
+            
+            <div class="post-content">
+              <p>今天给大家介绍如何在Spring Boot中开启事务，希望大家喜欢。<br>
+<strong>说到事务，那什么是事务呢？</strong></p>
+<!-- more -->
+<blockquote>
+<p>       事务（Transaction），一般是指要做的或所做的事情。</p>
+<ul>
+<li><strong>原子性（Atomicity）</strong>：事务作为一个整体被执行，包含在其中的对数据库的操作要么全部被执行，要么都不执行。</li>
+<li><strong>一致性（Consistency）</strong>：事务应确保数据库的状态从一个一致状态转变为另一个一致状态。一致状态的含义是数据库中的数据应满足完整性约束。</li>
+<li><strong>隔离性（Isolation）</strong>：多个事务并发执行时，一个事务的执行不应影响其他事务的执行。</li>
+<li><strong>持久性（Durability）</strong>：已被提交的事务对数据库的修改应该永久保存在数据库中。</li>
+</ul>
+</blockquote>
+<p>那么如何在Spring Boot中使用呢？其实只需要两步即可：</p>
+<ol>
+<li>在Application上添加@EnableTransactionManagement注解，用来开启事务。</li>
+<li>在Service实现类的方法上添加@Transactional注解。</li>
+</ol>
+<p><strong>具体实现：</strong><br>
+使用<a href="https://blog.csdn.net/m0_46696320/article/details/105472191">《Spring Boot中使用MyBatis详解》</a>的代码，在TransactionalApplication启动类上添加@EnableTransactionManagement注解开启事务：</p>
+<pre><code class="language-java">package com.zxw.transactional;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+@SpringBootApplication
+//开启事务
+@EnableTransactionManagement
+public class TransactionalApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(TransactionalApplication.class, args);
+    }
+
+}
+</code></pre>
+<p>在Service实现方法上添加@Transactional注解：</p>
+<pre><code class="language-java">package com.zxw.transactional.controller;
+
+import com.zxw.transactional.bean.PoetryBean;
+import com.zxw.transactional.service.PoetryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
+
+@Controller
+public class PoetryController {
+
+    @Autowired
+    private PoetryService poetryService;
+
+    @Transactional
+    @PostMapping(&quot;/register&quot;)
+    public String registerVerse(PoetryBean poetryBean) {
+        poetryService.addVerse(poetryBean);
+        int i = 3 / 0;
+        poetryService.addVerse(poetryBean);
+        return &quot;success&quot;;
+    }
+}
+</code></pre>
+<p>我在registerVerse方法添加了int i = 3 / 0;的代码，这段代码肯定会报错，在加了@Transactional注解后，我们看下可以往数据库插入几条数据？如果把@Transactional注解去掉又能添加几条呢？大家可以试试。</p>
+<blockquote>
+<p>项目地址：<a href="https://github.com/zxianwei/HelloSpringBoot">HelloSpringBoot</a></p>
+</blockquote>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://zxianwei.github.io/spring-boot-zhong-shi-yong-mybatis-xiang-jie/">
+                  <h3 class="post-title">
+                    Spring Boot中使用MyBatis详解
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>
