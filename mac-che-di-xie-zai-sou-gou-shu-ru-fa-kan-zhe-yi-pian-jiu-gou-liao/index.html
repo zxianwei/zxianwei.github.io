@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Spring Boot 热部署 | zxianwei</title>
+<title>Mac彻底卸载搜狗输入法，看这一篇就够了 | zxianwei</title>
 <meta name="description" content="念念不忘，必有回响。">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -104,45 +104,31 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Spring Boot 热部署</h2>
-            <div class="post-date">2020-03-29</div>
-            
-              <div class="feature-container" style="background-image: url('https://s1.ax1x.com/2020/03/29/GZ2MqJ.jpg')">
-              </div>
+            <h2 class="post-title">Mac彻底卸载搜狗输入法，看这一篇就够了</h2>
+            <div class="post-date">2020-04-29</div>
             
             <div class="post-content">
-              <p>       在开发调试过程中，已经启动了工程的运行。此时又修改了代码或者配置文件，若要使配置生效，就需要重新启动工程，这种方式降低了开发效率。</p>
+              <p>       今天手把手教大家如何卸载搜狗输入法，希望能帮到您！</p>
 <!-- more -->
-<p>       热部署，在修改了代码或者配置一经保存，系统就会对工程自动重启，不需要手动重启。若要实现热部署只需要在配置文件中添加一个依赖即可。</p>
-<pre><code> &lt;dependency&gt;
-    　&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-    　&lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;
-&lt;/dependency&gt;
+<p>       对于初次使用Mac电脑的同学，想卸载搜狗输入法发现在应用程序中是找不到的，因为他没有安装到<strong>应用程序</strong>中，也就无法像常规那样卸载的。如果去百度可能会找到这样的解决办法：</p>
+<pre><code class="language-java"># rm -rf /Library/Input\ Methods/SogouInput.app
+# rm -rf /Users/自己用户名/Library/Caches/SogouServices
+# rm -rf /Users/自己用户名/.sogouinput
 </code></pre>
-<p>       找到项目的配置然后如图选择，这样做的就是当idea整个窗口被钝化的时候工程就会自动部署。何为窗口钝化就是当应用切换到其他窗口的时候。<br>
-<img src="https://s1.ax1x.com/2020/03/29/GZ6Krd.png" alt="" loading="lazy"></p>
-<p>       自动部署有利也有弊，有利的地方就是无需手动重启，弊端就是有些代码还没有修改完毕，切换其他应用的时候也会自动部署，另外自动部署有时会出现一些神奇的bug。</p>
+<p>如果这样操作可能会遇到我这样到错误：<br>
+<img src="https://s1.ax1x.com/2020/04/29/JT7q5n.png" alt="示意图" loading="lazy"><br>
+大多少同学可能无法解决。好啦吧啦吧啦说了一堆，接下来是正题的时候了：电脑中如果有搜狗输入法安装包，没有的再去官网下载一下；下载下来的文件解压打开：<br>
+<img src="https://s1.ax1x.com/2020/04/29/JTb1w4.png" alt="示意图" loading="lazy"><br>
+剩下的步骤就是输入密码确认卸载，最后记得注销哦！</p>
 
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://zxianwei.github.io/JIdYE2S2L/" class="tag">
-                    Java
-                  </a>
-                
-                  <a href="https://zxianwei.github.io/SX2qS6bYf/" class="tag">
-                    Spring
-                  </a>
-                
-              </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://zxianwei.github.io/zhen-cang-de-ju-zi/">
+                <a href="https://zxianwei.github.io/ru-he-zai-spring-boot-kai-qi-shi-wu/">
                   <h3 class="post-title">
-                    珍藏的句子
+                    如何在Spring Boot开启事务
                   </h3>
                 </a>
               </div>

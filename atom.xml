@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zxianwei.github.io</id>
     <title>zxianwei</title>
-    <updated>2020-04-27T02:18:44.700Z</updated>
+    <updated>2020-04-29T08:15:52.039Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zxianwei.github.io"/>
     <link rel="self" href="https://zxianwei.github.io/atom.xml"/>
@@ -10,6 +10,28 @@
     <logo>https://zxianwei.github.io/images/avatar.png</logo>
     <icon>https://zxianwei.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, zxianwei</rights>
+    <entry>
+        <title type="html"><![CDATA[Mac彻底卸载搜狗输入法，看这一篇就够了]]></title>
+        <id>https://zxianwei.github.io/mac-che-di-xie-zai-sou-gou-shu-ru-fa-kan-zhe-yi-pian-jiu-gou-liao/</id>
+        <link href="https://zxianwei.github.io/mac-che-di-xie-zai-sou-gou-shu-ru-fa-kan-zhe-yi-pian-jiu-gou-liao/">
+        </link>
+        <updated>2020-04-29T07:47:35.000Z</updated>
+        <summary type="html"><![CDATA[<p>       今天手把手教大家如何卸载搜狗输入法，希望能帮到您！</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>       今天手把手教大家如何卸载搜狗输入法，希望能帮到您！</p>
+<!-- more -->
+<p>       对于初次使用Mac电脑的同学，想卸载搜狗输入法发现在应用程序中是找不到的，因为他没有安装到<strong>应用程序</strong>中，也就无法像常规那样卸载的。如果去百度可能会找到这样的解决办法：</p>
+<pre><code class="language-java"># rm -rf /Library/Input\ Methods/SogouInput.app
+# rm -rf /Users/自己用户名/Library/Caches/SogouServices
+# rm -rf /Users/自己用户名/.sogouinput
+</code></pre>
+<p>如果这样操作可能会遇到我这样到错误：<br>
+<img src="https://s1.ax1x.com/2020/04/29/JT7q5n.png" alt="示意图" loading="lazy"><br>
+大多少同学可能无法解决。好啦吧啦吧啦说了一堆，接下来是正题的时候了：电脑中如果有搜狗输入法安装包，没有的再去官网下载一下；下载下来的文件解压打开：<br>
+<img src="https://s1.ax1x.com/2020/04/29/JTb1w4.png" alt="示意图" loading="lazy"><br>
+剩下的步骤就是输入密码确认卸载，最后记得注销哦！</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[如何在Spring Boot开启事务]]></title>
         <id>https://zxianwei.github.io/ru-he-zai-spring-boot-kai-qi-shi-wu/</id>
@@ -1185,118 +1207,6 @@ public class Student {
 
 </code></pre>
 <p>以上就是Jdbc Template的增删改查。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Hello Spring Boot]]></title>
-        <id>https://zxianwei.github.io/hellospring/</id>
-        <link href="https://zxianwei.github.io/hellospring/">
-        </link>
-        <updated>2019-07-15T08:46:22.000Z</updated>
-        <summary type="html"><![CDATA[<h4 id="基于spring-boot构建的应用程序有以下特点">基于Spring Boot构建的应用程序有以下特点</h4>
-<ul>
-<li>
-<h5 id="快-很快-非常快">快、很快、非常快</h5>
-</li>
-<li>
-<h5 id="进可开箱即用退可按需改动">进可开箱即用，退可按需改动</h5>
-</li>
-<li>
-<h5 id="提供各种非功能特性">提供各种非功能特性</h5>
-</li>
-<li>
-<h5 id="不用生成代码没有xml配置">不用生成代码，没有XML配置</h5>
-</li>
-</ul>
-]]></summary>
-        <content type="html"><![CDATA[<h4 id="基于spring-boot构建的应用程序有以下特点">基于Spring Boot构建的应用程序有以下特点</h4>
-<ul>
-<li>
-<h5 id="快-很快-非常快">快、很快、非常快</h5>
-</li>
-<li>
-<h5 id="进可开箱即用退可按需改动">进可开箱即用，退可按需改动</h5>
-</li>
-<li>
-<h5 id="提供各种非功能特性">提供各种非功能特性</h5>
-</li>
-<li>
-<h5 id="不用生成代码没有xml配置">不用生成代码，没有XML配置</h5>
-</li>
-</ul>
-<!-- more -->
-<h4 id="hello-spring">Hello-Spring</h4>
-<ul>
-<li>
-<h5 id="编写第一个spring程序打开spring网站">编写第一个Spring程序，打开<a href="https://start.spring.io/">spring</a>网站</h5>
-</li>
-<li>
-<h5 id="选择maven-project-java-spring-boot的版本-group和artifact的信息-添加search-dependencies-to-add等信息如下图最后点击generate-project下载压缩包">选择Maven Project、Java、Spring Boot的版本、Group和Artifact的信息、添加Search dependencies to add等信息如下图，最后点击Generate Project下载压缩包</h5>
-</li>
-</ul>
-<figure data-type="image" tabindex="1"><img src="https://zxianwei.github.io/post-images/1558601345593.png" alt="" loading="lazy"></figure>
-<ul>
-<li>
-<h5 id="将压缩包解压用idea打开该项目打开后的项目结构如下图">将压缩包解压，用IDEA打开该项目，打开后的项目结构如下图：</h5>
-</li>
-</ul>
-<figure data-type="image" tabindex="2"><img src="https://zxianwei.github.io/post-images/1558601366004.png" alt="" loading="lazy"></figure>
-<ul>
-<li>
-<h5 id="编写第一行代码">编写第一行代码</h5>
-</li>
-</ul>
-<pre><code>package com.zxw.hello.hellospring;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-@SpringBootApplication
-@RestController
-public class HelloSpringApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(HelloSpringApplication.class, args);
-    }
-
-    @RequestMapping(&quot;/hello&quot;)
-    public String hello() {
-        return &quot;Hello Spring&quot;;
-    }
-}
-
-</code></pre>
-<p>运行该项目，打开Terminal输入</p>
-<pre><code> curl http://localhost:8080/hello 
-</code></pre>
-<p>就会返回（如下图）</p>
-<pre><code>Hello Spring%  
-</code></pre>
-<figure data-type="image" tabindex="3"><img src="https://s1.ax1x.com/2020/03/22/85SYz8.md.png" alt="image" loading="lazy"></figure>
-<p>在Terminal输入</p>
-<pre><code>curl http://localhost:8080/actuator/health
-得到结果
-{&quot;status&quot;:&quot;UP&quot;}%
-可以检查程序是否正常
-</code></pre>
-<p>执行打包：在Terminal中输入命令:</p>
-<pre><code>mvn clean package -Dmaven.test.skip
-打包完成后输入：ls 
-得到返回结果：
-HELP.md          hello-spring.iml mvnw             mvnw.cmd         pom.xml          src              target
-
-再输入：cd target
-得到返回结果：
-lasses                                  hello-spring-0.0.1-SNAPSHOT.jar          maven-archiver
-generated-sources                        hello-spring-0.0.1-SNAPSHOT.jar.original maven-status
-
-这样就可以得到可执行的jar包用java -jar 就可以运行这个程序如：
-java -jar hello-spring-0.0.1-SNAPSHOT.jar
-
-
-</code></pre>
 ]]></content>
     </entry>
 </feed>
