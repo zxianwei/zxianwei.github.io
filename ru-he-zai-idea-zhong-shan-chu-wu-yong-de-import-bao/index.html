@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Mac彻底卸载搜狗输入法，看这一篇就够了 | zxianwei</title>
+<title>如何在IDEA中删除无用的import包 | zxianwei</title>
 <meta name="description" content="念念不忘，必有回响。">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -104,31 +104,26 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Mac彻底卸载搜狗输入法，看这一篇就够了</h2>
-            <div class="post-date">2020-04-29</div>
+            <h2 class="post-title">如何在IDEA中删除无用的import包</h2>
+            <div class="post-date">2021-11-28</div>
             
             <div class="post-content">
-              <p>       今天手把手教大家如何卸载搜狗输入法，希望能帮到您！</p>
+              <p>       今天给大家分享如何一劳永逸的在IDEA中删除无用的import包，希望能帮到您！</p>
 <!-- more -->
-<p>       对于初次使用Mac电脑的同学，想卸载搜狗输入法发现在应用程序中是找不到的，因为他没有安装到<strong>应用程序</strong>中，也就无法像常规那样卸载的。如果去百度可能会找到这样的解决办法：</p>
-<pre><code class="language-java"># rm -rf /Library/Input\ Methods/SogouInput.app
-# rm -rf /Users/自己用户名/Library/Caches/SogouServices
-# rm -rf /Users/自己用户名/.sogouinput
+<p>       写完代码后每个类通常会有多余的import包，我们可以使用快捷键进行清理，mac的快捷是<strong>option+command+O</strong>如果不起作用那就是快捷键发生了冲突，可以按着下面图片这样手动删除<a href="https://imgtu.com/i/oKnzxx"><img src="https://z3.ax1x.com/2021/11/28/oKnzxx.md.png" alt="oKnzxx.md.png" loading="lazy"></a></p>
+<p>       使用快捷键删除我们难免有遗忘的时候，我最近发现了在idea内置的git提交代码的时候就有<strong>Optimize imports</strong>这个选项，勾选后就会删除<strong>本次要提交所有类</strong>的无用imports。内置的git还有格式化代码等操作，大家按着自己的需要勾选。<br>
+<a href="https://imgtu.com/i/oKuaLT"><img src="https://z3.ax1x.com/2021/11/28/oKuaLT.md.jpg" alt="oKuaLT.md.jpg" loading="lazy"></a></p>
+<pre><code>上述操作Android Studio同样适用。
 </code></pre>
-<p>如果这样操作可能会遇到我这样到错误：<br>
-<img src="https://s1.ax1x.com/2020/04/29/JT7q5n.png" alt="示意图" loading="lazy"><br>
-大多少同学可能无法解决。好啦吧啦吧啦说了一堆，接下来是正题的时候了：电脑中如果有搜狗输入法安装包，没有的再去官网下载一下；下载下来的文件解压打开：<br>
-<img src="https://s1.ax1x.com/2020/04/29/JTb1w4.png" alt="示意图" loading="lazy"><br>
-剩下的步骤就是输入密码确认卸载，最后记得注销哦！</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://zxianwei.github.io/ru-he-zai-spring-boot-kai-qi-shi-wu/">
+                <a href="https://zxianwei.github.io/mac-che-di-xie-zai-sou-gou-shu-ru-fa-kan-zhe-yi-pian-jiu-gou-liao/">
                   <h3 class="post-title">
-                    如何在Spring Boot开启事务
+                    Mac彻底卸载搜狗输入法，看这一篇就够了
                   </h3>
                 </a>
               </div>
